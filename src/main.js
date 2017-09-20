@@ -25,7 +25,7 @@ function createWindow() {
     frame: false,
   });
 
-  // and load the index.html of the app.
+  // load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
