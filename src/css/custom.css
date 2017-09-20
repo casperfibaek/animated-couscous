@@ -1,0 +1,83 @@
+#app{
+	color: #222;
+	height: 100%;
+	width: 100%;
+	font-family: sans-serif;
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+}
+
+.colors-blue{
+  	background-image: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%) !important;
+}
+
+.base{
+  margin: 60px;
+  box-shadow: 2px 2px 5px rgba(3, 150, 255, 0.75);
+  background: rgba(255, 255, 255, 0.95) !important;
+  min-width: 340px;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.monitor-item{
+  background: #6191b3;
+  color: whitesmoke;
+  width: 140px;
+  box-shadow: 2px 2px 4px rgba(25, 35, 43, 0.44);
+  height: 160px;
+  border-radius: 3px;
+  padding: 4px;
+  margin: 5px;
+}
+
+.userMenuButton{
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-image: linear-gradient( 135deg, #FEB692 10%, #EA5455 100%);
+  padding: 10px;
+  box-shadow: 2px 2px 5px rgba(3, 150, 255, 0.25);
+  border-radius: 3px;
+  color: whitesmoke;
+  cursor: pointer;
+}
+
+.userMenu{
+  position: absolute;
+  top: 6px;
+  right: 10px;
+}
+
+.siteTable{
+  box-shadow: 0px 0px 8px -1px rgba(25, 35, 43, 0.40);
+}
+
+.siteTable-row{
+  cursor: pointer;
+}
+
+.siteImage{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.margin-top{
+  margin-top: 20px;
+}
+
+.form-label{
+  font-weight: bold;
+  width: 60px !important;
+}
+
+.logo{
+  margin-top: 40px;
+  bottom: 0;
+}
+
+.h6{
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
