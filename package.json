@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "An application to control ESA Imagery",
   "main": "./src/main.js",
+  "private": true,
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . --packageManager=yarn --prune=false"

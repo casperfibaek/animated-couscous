@@ -1,5 +1,8 @@
 /* eslint-env browser */
+
 module.exports = {
+
+
   getCredentials: function getCredentials(str) {
     const form = document.getElementsByClassName(str)[0];
     const credentials = {};
@@ -14,17 +17,56 @@ module.exports = {
     }
     return credentials;
   },
-  // sortArray: function sortArray(a, b, reference) {
-  //   if (reference === 'Name') {
-  //     if (a.Name > b.Name) { return 1; }
-  //     if (a.Name === b.Name) { return 0; }
-  //     return -1;
-  //   }
-  //   if (reference === 'Satellite') {
-  //     if (a.Satellite > b.Satellite) { return 1; }
-  //     if (a.Satellite === b.Satellite) { return 0; }
-  //     return -1;
-  //   }
-  //   return 1;
-  // },
+
+
+  // Ege Özcan @ StackOverflow
+  dynamicSortAlphabetic: function dynamicSortAlphabetic(property, order = 1) {
+    let sortOrder = order;
+    if (property[0] === '-') {
+      sortOrder = -1;
+      property = property.substr(1); // eslint-disable-line
+    }
+
+    return function sort(a, b) {
+      let result;
+      const A = a[property].toLowerCase();
+      const B = b[property].toLowerCase();
+
+      if (A < B) {
+        result = -1;
+      } else if (A > B) {
+        result = 1;
+      } else {
+        result = 0;
+      }
+
+      return result * sortOrder;
+    };
+  },
+
+
+  dynamicSortDates: function dynamicSortDates(property, order = 1) {
+    let sortOrder = order;
+    if (property[0] === '-') {
+      sortOrder = -1;
+      property = property.substr(1); // eslint-disable-line
+    }
+
+    return function sort(a, b) {
+      let result;
+      const A = Date.parse(a[property].split('-').reverse().toString());
+      const B = Date.parse(b[property].split('-').reverse().toString());
+      if (A < B) {
+        result = -1;
+      } else if (A > B) {
+        result = 1;
+      } else {
+        result = 0;
+      }
+
+      return result * sortOrder;
+    };
+  },
+
+
 };
