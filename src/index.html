@@ -88,18 +88,12 @@
           <table class="table table-striped table-hover siteTable">
             <thead>
               <tr>
-                <th>Site</th>
-                <th>Satellite</th>
-                <th>Latest image</th>
-                <th>Start date</th>
+                <th v-for="(value, key) in monitoring[0]" sorted="none" class="table-head sites" v-on:click='sortTable' v-bind:reference="key">{{ key }}</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for='site in monitoring' class='siteTable-row'>
-                <td>{{ site.name }}</td>
-                <td>{{ site.satellite }}</td>
-                <td>{{ site.latest }}</td>
-                <td>{{ site.start }}</td>
+                <td v-for='value in site'>{{ value }}</td>
               </tr>
             </tbody>
           </table>
@@ -110,36 +104,52 @@
       <template v-if='settingsOpen' >
         <div class="modal active">
           <div class="modal-overlay"></div>
-          <div class="modal-container">
+          <div class="modal-container settingsContainer">
             <div class="modal-header">
-              <button class="btn btn-clear float-right" v-on:click='toggleSettings()'></button>
-              <div class="modal-title h5">Settings</div>
+              <div class="modal-title text-center h6">Settings</div>
             </div>
             <div class="modal-body">
               <div class="content">
-                <div class="form-group">
-                  <label class="form-switch">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <span>Download only metadata</span>
-                  </label>
-                </div>
-                <div class="form-group">
-                  <span>Download frequency</span>
-                  <select class="form-select">
-                    <option>1 hour</option>
-                    <option>3 hours</option>
-                    <option>6 hours</option>
-                    <option>12 hours</option>
-                    <option>24 hours</option>
-                  </select>
-                </div>
-                <label for="folder">Download folder: </label>
-                <button name="folder" type='button' class="btn btn-secondary" v-on:click='openFilesystem()'><span>Change</span></button>
+                <form class="form-horizontal">
+                  <div class="form-group height-32">
+                    <label class="col-7 form-text">Only metadata</label>
+                    <label class="col-5 form-switch">
+                      <input type="checkbox" checked>
+                      <i class="form-icon"></i>
+                    </label>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-7 form-text">Frequency</label>
+                    <select class="col-5 form-select">
+                      <option>1 hour</option>
+                      <option>3 hours</option>
+                      <option>6 hours</option>
+                      <option>12 hours</option>
+                      <option>24 hours</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-7 form-text" for="folder">Storage folder: </label>
+                    <button name="folder" type='button' class="btn btn-secondary col-5" v-on:click='openFilesystem()'>
+                      <span>Change</span>
+                    </button>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-7 form-text" for="folder">Default script: </label>
+                    <button name="folder" type='button' class="btn btn-secondary col-5" v-on:click='openFilesystem()'>
+                      <span>Change</span>
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" name="apply" class="btn btn-primary" v-on:click='toggleSettings()'>Apply</button>
+              <button class="btn btn-primary float-left" v-on:click='toggleSettings()' name="close">
+                <span>Close</span>
+              </button>
+              <button type="button" name="apply" class="btn btn-primary" v-on:click='toggleSettings()'>
+                <span>Apply</span>
+              </button>
             </div>
           </div>
         </div>

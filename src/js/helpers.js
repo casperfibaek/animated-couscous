@@ -14,4 +14,17 @@ module.exports = {
     }
     return credentials;
   },
+  // sortArray: function sortArray(a, b, reference) {
+  //   if (reference === 'Name') {
+  //     if (a.Name > b.Name) { return 1; }
+  //     if (a.Name === b.Name) { return 0; }
+  //     return -1;
+  //   }
+  //   if (reference === 'Satellite') {
+  //     if (a.Satellite > b.Satellite) { return 1; }
+  //     if (a.Satellite === b.Satellite) { return 0; }
+  //     return -1;
+  //   }
+  //   return 1;
+  // },
 };

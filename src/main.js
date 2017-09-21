@@ -17,12 +17,14 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
+    width: 700,
     height: 600,
+    minHeight: 580,
+    minWidth: 540,
     icon: `${__dirname}/icon.png`,
     autoHideMenuBar: true,
-    resizable: false,
-    frame: false,
+    resizable: true,
+    frame: true,
   });
 
   // load the index.html of the app.
