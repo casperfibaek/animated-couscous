@@ -88,12 +88,12 @@
           <table class="table table-striped table-hover siteTable">
             <thead>
               <tr>
-                <th v-for="(value, key) in monitoring[0]" sorted="none" class="table-head sites" v-on:click='sortTable' v-bind:reference="key">{{ key }}</th>
+                <th v-for="(value, key) in monitoring[0]" sorted="none" class="table-head sites" v-on:click='sortTable' v-bind:reference="key"><span>{{ key }}</span></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for='site in monitoring' class='siteTable-row'>
-                <td v-for='value in site'>{{ value }}</td>
+                <td v-for='value in site'><span>{{ value }}</span></td>
               </tr>
             </tbody>
           </table>
@@ -107,6 +107,7 @@
           <div class="modal-container settingsContainer">
             <div class="modal-header">
               <div class="modal-title text-center h6">Settings</div>
+              <div class="divider"></div>
             </div>
             <div class="modal-body">
               <div class="content">
@@ -147,7 +148,7 @@
               <button class="btn btn-primary float-left" v-on:click='toggleSettings()' name="close">
                 <span>Close</span>
               </button>
-              <button type="button" name="apply" class="btn btn-primary" v-on:click='toggleSettings()'>
+              <button type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom" data-tooltip="Apply your changes." v-on:click='toggleSettings()'>
                 <span>Apply</span>
               </button>
             </div>

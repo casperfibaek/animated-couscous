@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --packageManager=yarn --prune=false"
+    "build": "electron-packager . --packageManager=yarn --prune=false --arch=x64 --platform=win32 --appCopyright=NIRAS SentinelDataManager --icon=src/icon.ico"
   },
   "repository": "none-yet",
   "keywords": [
