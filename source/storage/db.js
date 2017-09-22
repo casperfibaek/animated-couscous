@@ -1,30 +1,45 @@
 /* eslint-env node, browser */
 /* eslint-disable no-console, consistent-return */
 
-// npm config set python C:/Python27/python.exe
-// npm install sqlite3 --build-from-source --runtime=electron --target=1.7.6 --dist-url=https://atom.io/download/electron
-const sqlite3 = require('sqlite3').verbose();
+// in order to build the database it is necessary to build it using the below command.
+// It is possibly required to install vs2015 default.
+
+// npm install sqlite3 --build-from-source --runtime=electron --target=1.8.0 --dist-url=https://atom.io/download/electron
+const sqlite3 = require('sqlite3');
+const path = require('path');
+
+const dbPath = path.join(__dirname, '/db/common.db');
+const vue = window.vue;
 
 /*
   sqlite3.OPEN_READONLY: open the database for read-only.
   sqlite3.OPEN_READWRITE : open the database for reading and writting.
   sqlite3.OPEN_CREATE: open the database, if the database does not exist, create a new database.
 */
-
-const db = new sqlite3.Database(':memory:');
+const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
+  if (err) { vue.error.flag = true; vue.error.message = err.message; } else {
+    console.log('Connected to the chinook database.');
+  }
+});
 
 db.serialize(() => {
-  db.run('CREATE TABLE lorem (info TEXT)');
-
-  const stmt = db.prepare('INSERT INTO lorem VALUES (?)');
-  for (let i = 0; i < 10; i += 1) {
-    stmt.run(`Ipsum ${i}`);
-  }
-  stmt.finalize();
-
-  db.each('SELECT rowid AS id, info FROM lorem', (err, row) => {
-    console.log(`${row.id}: ${row.info}`);
+  db.each(`
+    SELECT *
+    FROM sites
+  `, (err, row) => {
+    if (err) { vue.error.flag = true; vue.error.message = err.message; } else {
+      vue.lists.sites.push({
+        Name: row.name,
+        Satellite: row.satellite,
+        Latest: row.latest,
+        Start: row.start,
+      });
+    }
   });
 });
 
-db.close();
+db.close((err) => {
+  if (err) { vue.error.flag = true; vue.error.message = err.message; } else {
+    console.log('Close the database connection.');
+  }
+});

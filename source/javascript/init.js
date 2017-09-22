@@ -8,59 +8,50 @@ const remote = require('electron').remote;
 const app = remote.app;
 const shell = remote.shell;
 
-const vue = new Vue({
+vue = new Vue({ // eslint-disable-line
   el: '#app',
   data: {
-    loggedIn: true,
     formError: {
       username: false,
       password: false,
+    },
+    error: {
+      flag: false,
+      message: '',
     },
     credentials: {
       name: null,
       password: null,
     },
-    menuOpen: false,
-    settingsOpen: false,
-    monitoring: [
-      {
-        Name: 'København',
-        Satellite: 'S1',
-        Latest: '01-09-2017',
-        Start: '15-07-2017',
-      },
-      {
-        Name: 'Tønder',
-        Satellite: 'S1',
-        Latest: '24-08-2017',
-        Start: '07-06-2017',
-      },
-      {
-        Name: 'Samsø',
-        Satellite: 'S2',
-        Latest: '28-08-2017',
-        Start: '23-07-2017',
-      },
-    ],
+    pages: {
+      login: false,
+      sites: true,
+      menu: false,
+      settings: false,
+      create: false,
+    },
+    lists: {
+      sites: [],
+    },
   },
   created() {
     const vm = this;
     window.addEventListener('mouseup', (e) => {
       let clickedClass;
-      if (vm.menuOpen) {
+      if (vm.pages.menu) {
         clickedClass = e.target.getAttribute('class');
         if (clickedClass && clickedClass.indexOf('base') !== -1) {
-          vm.menuOpen = false;
+          vm.pages.menu = false;
         }
         if (clickedClass && clickedClass.indexOf('main') !== -1) {
-          vm.menuOpen = false;
+          vm.pages.menu = false;
         }
       }
 
-      if (vm.settingsOpen) {
+      if (vm.pages.settings) {
         clickedClass = e.target.getAttribute('class');
         if (clickedClass && clickedClass === 'modal-overlay') {
-          vm.settingsOpen = false;
+          vm.pages.settings = false;
         }
       }
     });
@@ -77,7 +68,8 @@ const vue = new Vue({
         this.formError.username = false;
         this.formError.password = 'Password must have at least 4 characters';
       } else {
-        this.loggedIn = true;
+        this.pages.login = false;
+        this.pages.sites = true;
         this.credentials = credentials;
         this.formError = {
           username: false,
@@ -87,49 +79,52 @@ const vue = new Vue({
     },
     logout: function logout() {
       this.credentials = {};
-      this.loggedIn = false;
-      this.closeMenu();
+      this.goto('login');
     },
     toggleMenu: function toggleMenu() {
-      this.menuOpen = !this.menuOpen;
+      this.pages.menu = !this.pages.menu;
     },
     toggleSettings: function toggleSettings() {
-      this.settingsOpen = !this.settingsOpen;
+      this.pages.settings = !this.pages.settings;
     },
     closeMenu: function closeMenu() {
-      if (this.menuOpen) { this.menuOpen = !this.menuOpen; }
+      if (this.pages.menu) { this.pages.menu = !this.pages.menu; }
     },
     openFilesystem: function openFilesystem() {
       shell.showItemInFolder('C:/');
     },
     createNew: function createNew() {
-      this.monitoring.push({
-        Name: 'Vendsyssel',
-        Satellite: 'S2',
-        Latest: '30-08-2017',
-        Start: '15-09-2017',
-      });
+      this.pages.settings = false;
+      this.pages.sites = false;
+      this.pages.create = true;
     },
     sortTable: function sortTable(event) {
       const target = event.target.attributes;
+      console.log(target);
       const reference = target.reference.nodeValue;
       const sorted = target.sorted.nodeValue;
 
-      if (sorted === 'none' || sorted === 'down') {
+      if (sorted === 'down') {
         event.target.attributes.sorted.nodeValue = 'up'; // eslint-disable-line
         if (reference === 'Name' || reference === 'Satellite') {
-          this.monitoring.sort(helpers.dynamicSortAlphabetic(reference));
+          this.lists.sites.sort(helpers.dynamicSortAlphabetic(reference));
         } else if (reference === 'Latest' || reference === 'Start') {
-          this.monitoring.sort(helpers.dynamicSortDates(reference));
+          this.lists.sites.sort(helpers.dynamicSortDates(reference));
         }
       } else {
         event.target.attributes.sorted.nodeValue = 'down'; // eslint-disable-line
         if (reference === 'Name' || reference === 'Satellite') {
-          this.monitoring.sort(helpers.dynamicSortAlphabetic(reference, -1));
+          this.lists.sites.sort(helpers.dynamicSortAlphabetic(reference, -1));
         } else if (reference === 'Latest' || reference === 'Start') {
-          this.monitoring.sort(helpers.dynamicSortDates(reference, -1));
+          this.lists.sites.sort(helpers.dynamicSortDates(reference, -1));
         }
       }
+    },
+    goto: function goto(str) {
+      Object.keys(this.pages).forEach((key) => {
+        this.pages[key] = false;
+      });
+      this.pages[str] = true;
     },
     closeProgramme: function closeProgramme() {
       app.quit();

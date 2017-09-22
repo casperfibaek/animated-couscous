@@ -6,17 +6,20 @@
   "private": true,
   "scripts": {
     "start": "electron .",
+    "postinstall": "npm install sqlite3 --build-from-source --runtime=electron --target=1.8.0 --dist-url=https://atom.io/download/electron",
     "build": "electron-packager . --packageManager=yarn --prune=false --arch=x64 --platform=win32 --appCopyright=NIRAS SentinelDataManager --icon=source/icon.ico"
   },
   "repository": "https://github.com/casperfibaek/animated-couscous",
   "keywords": [
-    "Electron"
+    "Electron",
+    "Sentinel"
   ],
   "author": "Casper Fibæk @ Niras A/S",
   "license": "CC0-1.0",
   "dependencies": {
-    "electron": "^1.7.6",
-    "electron-reload": "^1.2.1"
+    "electron": "^1.8.0",
+    "electron-reload": "^1.2.1",
+    "sqlite3": "^3.1.11"
   },
   "devDependencies": {}
 }

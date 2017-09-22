@@ -54,8 +54,8 @@ module.exports = {
 
     return function sort(a, b) {
       let result;
-      const A = Date.parse(a[property].split('-').reverse().toString());
-      const B = Date.parse(b[property].split('-').reverse().toString());
+      const A = Date.parse(a[property].split('-').toString());
+      const B = Date.parse(b[property].split('-').toString());
       if (A < B) {
         result = -1;
       } else if (A > B) {
