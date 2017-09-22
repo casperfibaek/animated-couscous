@@ -8,7 +8,7 @@ const remote = require('electron').remote;
 const app = remote.app;
 const shell = remote.shell;
 
-vue = new Vue({ // eslint-disable-line
+window.vue = new Vue({ // eslint-disable-line
   el: '#app',
   data: {
     formError: {
@@ -28,7 +28,8 @@ vue = new Vue({ // eslint-disable-line
       sites: true,
       menu: false,
       settings: false,
-      create: false,
+      createSite: false,
+      createGeometry: false,
     },
     lists: {
       sites: [],
@@ -93,14 +94,8 @@ vue = new Vue({ // eslint-disable-line
     openFilesystem: function openFilesystem() {
       shell.showItemInFolder('C:/');
     },
-    createNew: function createNew() {
-      this.pages.settings = false;
-      this.pages.sites = false;
-      this.pages.create = true;
-    },
     sortTable: function sortTable(event) {
       const target = event.target.attributes;
-      console.log(target);
       const reference = target.reference.nodeValue;
       const sorted = target.sorted.nodeValue;
 
@@ -125,6 +120,9 @@ vue = new Vue({ // eslint-disable-line
         this.pages[key] = false;
       });
       this.pages[str] = true;
+    },
+    gotoModal: function gotoModal(str) {
+      //
     },
     closeProgramme: function closeProgramme() {
       app.quit();

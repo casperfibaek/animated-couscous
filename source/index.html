@@ -101,7 +101,7 @@
               </tr>
             </tbody>
           </table>
-          <button type="button" name="createNewSite" class='btn btn-primary margin-top' v-on:click='createNew()'>Create new</button>
+          <button type="button" name="createNewSite" class='btn btn-primary margin-top' v-on:click="goto('createSite')">Create new</button>
         </div>
       </template>
 
@@ -129,7 +129,7 @@
                       <option>1 hour</option>
                       <option>3 hours</option>
                       <option>6 hours</option>
-                      <option>12 hours</option>
+                      <option selected="selected">12 hours</option>
                       <option>24 hours</option>
                     </select>
                   </div>
@@ -167,7 +167,7 @@
         </div>
       </template>
 
-      <template v-if="pages.create">
+      <template v-if="pages.createSite">
         <div class='empty base'>
         <h6>Create new</h6>
         <div class="divider"></div>
@@ -177,7 +177,7 @@
               <label class="form-label" for="input-example-1">Name</label>
             </div>
             <div class="col-9">
-              <input class="form-input" type="text" id="input-example-1" placeholder="Name">
+              <input class="form-input" type="text" id="input-example-1" placeholder="Project name">
             </div>
           </div>
           <div class="form-group">
@@ -206,26 +206,58 @@
             <div class="col-3">
               <label class="form-label">Download</label>
             </div>
-            <div class="col-9">
-              <label class="form-radio">
-                <input type="radio" name="gender" checked>
+            <div class="col-1"></div>
+            <div class="col-4">
+              <label class="form-radio float-left">
+                <input type="radio" name="downloadType" checked>
                 <i class="form-icon"></i>
-                <span>Metadata</span>
+                <span style="font-size: 0.99em;">Metadata</span>
               </label>
-              <label class="form-radio">
-                <input type="radio" name="gender">
+            </div>
+            <div class="col-4">
+              <label class="form-radio float-left">
+                <input type="radio" name="downloadType">
                 <i class="form-icon"></i>
-                <span>All files</span>
+                <span style="font-size: 0.99em;">All files</span>
               </label>
             </div>
           </div>
-
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label">Satellite</label>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-4">
+              <label class="form-radio float-left">
+                <input type="radio" name="satelliteType" checked>
+                <i class="form-icon"></i>
+                <span style="font-size: 0.99em;">Sentinel-1</span>
+              </label>
+            </div>
+            <div class="col-4">
+              <label class="form-radio float-left">
+                <input type="radio" name="satelliteType">
+                <i class="form-icon"></i>
+                <span style="font-size: 0.99em;">Sentinel-2</span>
+              </label>
+            </div>
+          </div>
           <div class="form-group">
             <div class="col-3">
               <label class="form-label"><span>Start date</span></label>
             </div>
             <div class="col-9">
               <input type="date" class="float-left"></input>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label"><span>Geometry</span></label>
+            </div>
+            <div class="col-9">
+              <button type="button" class="btn btn-secondary float-left">
+                <span>Create Geometry</span>
+              </button>
             </div>
           </div>
 
@@ -236,6 +268,28 @@
         <button type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom float-right margin-top" data-tooltip="Apply your changes." v-on:click="goto('sites')">
           <span>Apply</span>
         </button>
+        </div>
+      </template>
+
+      <template v-if='pages.createGeometry'>
+        <div class="modal active">
+          <div class="modal-overlay"></div>
+          <div class="modal-container settingsContainer">
+            <div class="modal-header">
+              <div class="modal-title text-center h6">Create Gemetry</div>
+              <div class="divider"></div>
+            </div>
+            <div class="modal-body">
+              <div class="content">
+                <div id="createMap">map</div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div class="divider">
+                <span>my footer</span>
+              </div>
+            </div>
+          </div>
         </div>
       </template>
 
