@@ -112,3 +112,11 @@
 .modal-header{
   padding-bottom: 0 !important;
 }
+
+.toast{
+  position: fixed;
+  height: 36px;
+  bottom: 10px;
+  right: 10px;
+  max-width: 200px;
+}
