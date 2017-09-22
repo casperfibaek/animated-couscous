@@ -2,26 +2,21 @@
   "name": "sentinel-data-manager",
   "version": "0.0.1",
   "description": "An application to control ESA Imagery",
-  "main": "./src/main.js",
+  "main": "./source/main.js",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --packageManager=yarn --prune=false --arch=x64 --platform=win32 --appCopyright=NIRAS SentinelDataManager --icon=src/icon.ico"
+    "build": "electron-packager . --packageManager=yarn --prune=false --arch=x64 --platform=win32 --appCopyright=NIRAS SentinelDataManager --icon=source/icon.ico"
   },
-  "repository": "none-yet",
+  "repository": "https://github.com/casperfibaek/animated-couscous",
   "keywords": [
     "Electron"
   ],
-  "author": "GitHub",
+  "author": "Casper Fibæk @ Niras A/S",
   "license": "CC0-1.0",
   "dependencies": {
-    "electron": "^1.8.0",
-    "electron-reload": "^1.2.1",
-    "vue": "^2.4.4",
-    "vue-router": "^2.7.0",
-    "vue-template-compiler": "^2.4.4"
+    "electron": "^1.7.6",
+    "electron-reload": "^1.2.1"
   },
-  "devDependencies": {
-    "vueify": "^9.4.1"
-  }
+  "devDependencies": {}
 }

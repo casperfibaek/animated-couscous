@@ -136,3 +136,5 @@ const vue = new Vue({
     },
   },
 });
+
+const database = require('../storage/db.js');
