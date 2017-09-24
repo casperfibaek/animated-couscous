@@ -17,9 +17,9 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800, // 560
-    height: 640,
-    minHeight: 640,
+    width: 560, // 800
+    height: 770,
+    minHeight: 770,
     minWidth: 560,
     icon: `${__dirname}/icons/icon.png`,
     autoHideMenuBar: true,
@@ -35,7 +35,7 @@ function createWindow() {
   }));
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
