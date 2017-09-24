@@ -17,11 +17,11 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    minHeight: 600,
-    minWidth: 540,
-    icon: `${__dirname}/icon.png`,
+    width: 800, // 560
+    height: 640,
+    minHeight: 640,
+    minWidth: 560,
+    icon: `${__dirname}/icons/icon.png`,
     autoHideMenuBar: true,
     resizable: true,
     frame: true,
