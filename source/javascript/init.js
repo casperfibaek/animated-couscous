@@ -24,8 +24,8 @@ window.vue = new Vue({ // eslint-disable-line
       password: null,
     },
     pages: {
-      login: false,
-      sites: true,
+      login: true,
+      sites: false,
       menu: false,
       settings: false,
       createSite: false,
