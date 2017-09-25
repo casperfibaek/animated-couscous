@@ -3,6 +3,7 @@
 /* globals Vue */
 
 const helpers = require('./helpers.js');
+const maps = require('./maps.js');
 const remote = require('electron').remote;
 
 const app = remote.app;
@@ -24,11 +25,13 @@ window.vue = new Vue({ // eslint-disable-line
       password: null,
     },
     pages: {
-      login: false,
-      sites: true,
+      login: true,
+      sites: false,
+      createSite: false,
+    },
+    modals: {
       menu: false,
       settings: false,
-      createSite: false,
       createGeometry: false,
     },
     lists: {
@@ -39,20 +42,20 @@ window.vue = new Vue({ // eslint-disable-line
     const vm = this;
     window.addEventListener('mouseup', (e) => {
       let clickedClass;
-      if (vm.pages.menu) {
+      if (vm.modals.menu) {
         clickedClass = e.target.getAttribute('class');
         if (clickedClass && clickedClass.indexOf('base') !== -1) {
-          vm.pages.menu = false;
+          vm.modals.menu = false;
         }
         if (clickedClass && clickedClass.indexOf('main') !== -1) {
-          vm.pages.menu = false;
+          vm.modals.menu = false;
         }
       }
 
-      if (vm.pages.settings) {
+      if (vm.modals.settings) {
         clickedClass = e.target.getAttribute('class');
         if (clickedClass && clickedClass === 'modal-overlay') {
-          vm.pages.settings = false;
+          vm.modals.settings = false;
         }
       }
     });
@@ -81,15 +84,6 @@ window.vue = new Vue({ // eslint-disable-line
     logout: function logout() {
       this.credentials = {};
       this.goto('login');
-    },
-    toggleMenu: function toggleMenu() {
-      this.pages.menu = !this.pages.menu;
-    },
-    toggleSettings: function toggleSettings() {
-      this.pages.settings = !this.pages.settings;
-    },
-    closeMenu: function closeMenu() {
-      if (this.pages.menu) { this.pages.menu = !this.pages.menu; }
     },
     openFilesystem: function openFilesystem() {
       shell.showItemInFolder('C:/');
@@ -121,8 +115,8 @@ window.vue = new Vue({ // eslint-disable-line
       });
       this.pages[str] = true;
     },
-    gotoModal: function gotoModal(str) {
-      //
+    toggleModal: function openModal(str) {
+      this.modals[str] = !this.modals[str];
     },
     closeProgramme: function closeProgramme() {
       app.quit();
