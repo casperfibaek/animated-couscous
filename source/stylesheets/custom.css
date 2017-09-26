@@ -129,6 +129,7 @@
 
 .sites > span{
   pointer-events: none;
+  user-select: none;
 }
 
 .nirasSpaceLogo{

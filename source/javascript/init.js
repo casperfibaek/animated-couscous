@@ -63,7 +63,6 @@ window.vue = new Vue({ // eslint-disable-line
   methods: {
     login: function login() {
       const credentials = helpers.getCredentials('loginForm');
-      console.log(credentials);
 
       if (credentials.username.length < 4) {
         this.formError.username = 'Login must have at least 4 characters';
@@ -125,3 +124,4 @@ window.vue = new Vue({ // eslint-disable-line
 });
 
 const database = require('../storage/db.js');
+const esa = require('./esa.js');

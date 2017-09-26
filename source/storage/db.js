@@ -18,7 +18,7 @@ const vue = window.vue;
 */
 const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
   if (err) { vue.error.flag = true; vue.error.message = err.message; } else {
-    console.log('Connected to the chinook database.');
+    // console.log('Connected to the database.');
   }
 });
 
@@ -40,6 +40,6 @@ db.serialize(() => {
 
 db.close((err) => {
   if (err) { vue.error.flag = true; vue.error.message = err.message; } else {
-    console.log('Close the database connection.');
+    // console.log('Closed the database connection.');
   }
 });
