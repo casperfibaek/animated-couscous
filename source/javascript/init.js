@@ -24,14 +24,19 @@ window.vue = new Vue({ // eslint-disable-line
       password: null,
     },
     pages: {
-      login: true,
+      login: false,
       sites: false,
-      createSite: false,
+      createSite_S1: true,
+      createSite_S2: false,
     },
     modals: {
       menu: false,
       settings: false,
       createGeometry: false,
+      satelliteSelect: false,
+    },
+    toggles: {
+      advanced_s1: false,
     },
     lists: {
       sites: [],
@@ -129,6 +134,9 @@ window.vue = new Vue({ // eslint-disable-line
     },
     toggleModal: function openModal(str) {
       this.modals[str] = !this.modals[str];
+    },
+    toggle: function toggles(str) {
+      this.toggles[str] = !this.toggles[str];
     },
     closeProgramme: function closeProgramme() {
       app.quit();

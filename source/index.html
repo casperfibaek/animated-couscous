@@ -102,7 +102,7 @@
               </tr>
             </tbody>
           </table>
-          <button type="button" name="createNewSite" class='btn btn-primary margin-top' v-on:click="goto('createSite')">Create new</button>
+          <button type="button" name="createNewSite" class='btn btn-primary margin-top' v-on:click="toggleModal('satelliteSelect')">Create new</button>
         </div>
       </template>
 
@@ -168,9 +168,9 @@
         </div>
       </template>
 
-      <template v-if="pages.createSite">
+      <template v-if="pages.createSite_S1">
         <div class='empty base'>
-        <h6 class="text-bold">Create new site</h6>
+        <h6 class="text-bold">Create Sentinel 1 Site</h6>
         <div class="divider"></div>
         <form class="form-horizontal">
           <div class="form-group">
@@ -186,7 +186,7 @@
               <label class="form-label" for="notes">Notes</label>
             </div>
             <div class="col-9">
-              <textarea class="form-input" placeholder="Notes regarding the area" name="notes" rows="3"></textarea>
+              <textarea class="form-input" placeholder="Notes regarding the area" name="notes" rows="3" maxlength="100"></textarea>
             </div>
           </div>
           <div class="form-group">
@@ -225,21 +225,231 @@
           </div>
           <div class="form-group">
             <div class="col-3">
-              <label class="form-label">Satellite</label>
+              <label class="form-label"><span>Start date</span></label>
+            </div>
+            <div class="col-9">
+              <input type="date" class="form-input"></input>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label"><span>Geometry</span></label>
+            </div>
+            <div class="col-9">
+              <button v-on:click="toggleModal('createGeometry')" type="button" class="form-input btn btn-secondary">
+                <span>Create Geometry</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-3"></div>
+            <div class="col-9">
+              <button v-on:click="toggle('advanced_s1')" class="btn btn-action circle" type="button">
+                <i v-bind:class="{ 'icon-arrow-down': !toggles.advanced_s1, 'icon-arrow-up': toggles.advanced_s1 }" class="icon"></i>
+                <!-- <i v-bind:class="{'icon-arrow-down': toggles.advanced_s1" class="icon"></i> -->
+              </button>
+              <span>Advanced</span>
+            </div>
+          </div>
+
+          <template v-if="toggles.advanced_s1">
+            <div class="divider"></div>
+            <div class="form-group">
+              <div class="col-3">
+                <label class="form-label"><span>Producttype</span></label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox">
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">SLC</span>
+                  </input>
+                </label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">GRD</span>
+                  </input>
+                </label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox">
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">OCN</span>
+                  </input>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-3">
+                <label class="form-label"><span>Polarisation</span></label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="float-left col-9">HH</span>
+                  </input>
+                </label>
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="float-left col-9">VV</span>
+                  </input>
+                </label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="float-left col-9">HV</span>
+                  </input>
+                </label>
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="float-left col-9">VH</span>
+                  </input>
+                </label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="float-left col-9 no-wrap">HH VH</span>
+                  </input>
+                </label>
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="float-left col-9 no-wrap">VV VH</span>
+                  </input>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-3">
+                <label class="form-label"><span>Operational- mode</span></label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox">
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">SM</span>
+                  </input>
+                </label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">IW</span>
+                  </input>
+                </label>
+              </div>
+              <div class="col-3">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox">
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">EW</span>
+                  </input>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-3">
+                <label class="form-label"><span>Orbit</span></label>
+              </div>
+              <div class="col-1"></div>
+              <div class="col-4">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">Acending</span>
+                  </input>
+                </label>
+              </div>
+              <div class="col-4">
+                <label class="form-checkbox float-left">
+                  <input type="checkbox" checked>
+                    <i class="form-icon col-3"></i>
+                    <span class="col-9">Decending</span>
+                  </input>
+                </label>
+              </div>
+            </div>
+
+          </template>
+
+        </form>
+        <button class="btn btn-primary float-left margin-top" v-on:click="goto('sites')" name="close">
+          <span>Close</span>
+        </button>
+        <button type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom float-right margin-top" data-tooltip="Apply your changes." v-on:click="goto('sites')">
+          <span>Apply</span>
+        </button>
+        </div>
+      </template>
+
+      <template v-if="pages.createSite_S2">
+        <div class='empty base'>
+        <h6 class="text-bold">Create Sentinel 2 Site</h6>
+        <div class="divider"></div>
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label" for="input-example-1">Name</label>
+            </div>
+            <div class="col-9">
+              <input class="form-input" type="text" id="input-example-1" placeholder="Project name">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label" for="notes">Notes</label>
+            </div>
+            <div class="col-9">
+              <textarea class="form-input" placeholder="Notes regarding the area" name="notes" rows="3" maxlength="100"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label" for="frequency">Frequency</label>
+            </div>
+            <div class="col-9">
+              <select class="form-select" name="frequency">
+                <option>1 hour</option>
+                <option>3 hours</option>
+                <option>6 hours</option>
+                <option selected="selected">12 hours</option>
+                <option>24 hours</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label">Download</label>
             </div>
             <div class="col-1"></div>
             <div class="col-4">
               <label class="form-radio float-left">
-                <input type="radio" name="satelliteType" checked>
+                <input type="radio" name="downloadType" checked>
                 <i class="form-icon"></i>
-                <span style="font-size: 0.99em;">Sentinel-1</span>
+                <span style="font-size: 0.99em;">Metadata</span>
               </label>
             </div>
             <div class="col-4">
               <label class="form-radio float-left">
-                <input type="radio" name="satelliteType">
+                <input type="radio" name="downloadType">
                 <i class="form-icon"></i>
-                <span style="font-size: 0.99em;">Sentinel-2</span>
+                <span style="font-size: 0.99em;">All files</span>
               </label>
             </div>
           </div>
@@ -248,7 +458,7 @@
               <label class="form-label"><span>Start date</span></label>
             </div>
             <div class="col-9">
-              <input type="date" class="float-left"></input>
+              <input type="date" class="form-input float-left"></input>
             </div>
           </div>
           <div class="form-group">
@@ -256,9 +466,17 @@
               <label class="form-label"><span>Geometry</span></label>
             </div>
             <div class="col-9">
-              <button v-on:click="toggleModal('createGeometry')" type="button" class="btn btn-secondary float-left">
+              <button v-on:click="toggleModal('createGeometry')" type="button" class="btn btn-secondary float-left col-12">
                 <span>Create Geometry</span>
               </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-3">
+              <label class="form-label"><span>Clouds <=</span></label>
+            </div>
+            <div class="col-9">
+              <input type="number" class="form-input" placeholder="10" value="10" max="100" min="1"></input>
             </div>
           </div>
         </form>
@@ -268,6 +486,35 @@
         <button type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom float-right margin-top" data-tooltip="Apply your changes." v-on:click="goto('sites')">
           <span>Apply</span>
         </button>
+        </div>
+      </template>
+
+
+      <template v-if="modals.satelliteSelect">
+        <div class="modal active">
+          <div class="modal-overlay"></div>
+          <div class="modal-container">
+            <div class="modal-header">
+              <div class="modal-title text-center h6 text-bold">
+                <span>Choose satellite</span>
+              </div>
+              <div class="divider"></div>
+            </div>
+            <div class="modal-body">
+              <div class="content">
+                <div class="float-left padding-right">
+                  <button class="btn btn-secondary" v-on:click="goto('createSite_S1'); toggleModal('satelliteSelect')" name="close">
+                    <span>Sentinel 1</span>
+                  </button>
+                </div>
+                <div class="float-right padding-left">
+                  <button type="button" name="apply" class="btn btn-secondary" v-on:click="goto('createSite_S2'); toggleModal('satelliteSelect')">
+                    <span>Sentinel 2</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </template>
 

@@ -1,3 +1,8 @@
+html{
+  height: 100%;
+  background: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%) !important;
+}
+
 #app{
 	color: #363d42;
 	height: 100%;
@@ -6,10 +11,6 @@
   position: absolute;
   display: flex;
   justify-content: space-around;
-}
-
-.colors-blue{
-  	background-image: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%) !important;
 }
 
 .base{
@@ -64,9 +65,17 @@
   cursor: pointer;
 }
 
-.siteImage{
-  padding-left: 8px;
-  padding-right: 8px;
+.padding-both{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.padding-left{
+  padding-left: 10px;
+}
+
+.padding-right{
+  padding-right: 10px;
 }
 
 .margin-top{
@@ -135,4 +144,12 @@
 .nirasSpaceLogo{
   filter: drop-shadow(1px 1px 1px rgba(0,76,100,0.5));
   margin: 10px;
+}
+
+.no-wrap{
+  white-space: nowrap;
+}
+
+.advancedBox{
+  border: 1px solid black;
 }

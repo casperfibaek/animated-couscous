@@ -2,7 +2,9 @@
 // const rp = require('request-promise');
 const search = require('./esaSearch');
 const user = require('../credentials');
+const sample = require('./esaSearchSample');
 
+console.log(sample);
 /*
   Credentials should be in the form:
     module.exports = {
@@ -15,6 +17,7 @@ const user = require('../credentials');
   TODO:
     - Parse the return
     - ADD searching through multiple rows
+    - Add Sentinel 1 and 2 page + modal to interface
 */
 
 const today = new Date();
