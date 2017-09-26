@@ -2,8 +2,7 @@
 /* eslint-disable no-unused-vars, no-new, no-console */
 /* globals Vue */
 
-const helpers = require('./helpers.js');
-const maps = require('./maps.js');
+const utils = require('./utils.js');
 const remote = require('electron').remote;
 
 const app = remote.app;
@@ -42,12 +41,26 @@ window.vue = new Vue({ // eslint-disable-line
     const vm = this;
     window.addEventListener('mouseup', (e) => {
       let clickedClass;
+
+      if (vm.pages.login) {
+        clickedClass = e.target.getAttribute('class');
+        if (
+          (clickedClass && clickedClass.indexOf('base') !== -1) ||
+          (clickedClass && clickedClass.indexOf('main') !== -1)
+        ) {
+          const username = document.getElementsByClassName('username-input')[0];
+          if (username.value.length < 5) { username.focus(); } else {
+            const password = document.getElementsByClassName('password-input')[0];
+            if (password.value.length < 5) { password.focus(); }
+          }
+        }
+      }
       if (vm.modals.menu) {
         clickedClass = e.target.getAttribute('class');
-        if (clickedClass && clickedClass.indexOf('base') !== -1) {
-          vm.modals.menu = false;
-        }
-        if (clickedClass && clickedClass.indexOf('main') !== -1) {
+        if (
+          (clickedClass && clickedClass.indexOf('base') !== -1) ||
+          (clickedClass && clickedClass.indexOf('main') !== -1)
+        ) {
           vm.modals.menu = false;
         }
       }
@@ -62,7 +75,7 @@ window.vue = new Vue({ // eslint-disable-line
   },
   methods: {
     login: function login() {
-      const credentials = helpers.getCredentials('loginForm');
+      const credentials = utils.getCredentials('loginForm');
 
       if (credentials.username.length < 4) {
         this.formError.username = 'Login must have at least 4 characters';
@@ -95,16 +108,16 @@ window.vue = new Vue({ // eslint-disable-line
       if (sorted === 'down') {
         event.target.attributes.sorted.nodeValue = 'up'; // eslint-disable-line
         if (reference === 'Name' || reference === 'Satellite') {
-          this.lists.sites.sort(helpers.dynamicSortAlphabetic(reference));
+          this.lists.sites.sort(utils.dynamicSortAlphabetic(reference));
         } else if (reference === 'Latest' || reference === 'Start') {
-          this.lists.sites.sort(helpers.dynamicSortDates(reference));
+          this.lists.sites.sort(utils.dynamicSortDates(reference));
         }
       } else {
         event.target.attributes.sorted.nodeValue = 'down'; // eslint-disable-line
         if (reference === 'Name' || reference === 'Satellite') {
-          this.lists.sites.sort(helpers.dynamicSortAlphabetic(reference, -1));
+          this.lists.sites.sort(utils.dynamicSortAlphabetic(reference, -1));
         } else if (reference === 'Latest' || reference === 'Start') {
-          this.lists.sites.sort(helpers.dynamicSortDates(reference, -1));
+          this.lists.sites.sort(utils.dynamicSortDates(reference, -1));
         }
       }
     },
@@ -124,4 +137,5 @@ window.vue = new Vue({ // eslint-disable-line
 });
 
 const database = require('../storage/db.js');
-const esa = require('./esa.js');
+const esa = require('./esa/esa.js');
+// const maps = require('./maps/maps.js');

@@ -19,7 +19,7 @@ module.exports = {
   },
 
 
-  // Ege Özcan @ StackOverflow
+  // Based on: Ege Özcan @ StackOverflow
   dynamicSortAlphabetic: function dynamicSortAlphabetic(property, order = 1) {
     let sortOrder = order;
     if (property[0] === '-') {
@@ -45,6 +45,7 @@ module.exports = {
   },
 
 
+  // Based on: Ege Özcan @ StackOverflow
   dynamicSortDates: function dynamicSortDates(property, order = 1) {
     let sortOrder = order;
     if (property[0] === '-') {

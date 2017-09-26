@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // const rp = require('request-promise');
 const search = require('./esaSearch');
-const user = require('./credentials');
+const user = require('../credentials');
 
 /*
   Credentials should be in the form:
