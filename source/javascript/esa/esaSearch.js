@@ -3,57 +3,46 @@ const request = require('request-promise');
 const prepare = require('./esaPrepareSearch');
 const parse = require('./esaParse');
 
-function baseSearch(obj) {
-  return new Promise((resolve, reject) => {
-    prepare(obj).then((prepared) => {
-      request(prepared).then((esaResponse) => {
-        parse(esaResponse).then((parsed) => {
-          resolve(parsed);
-        }).catch((error) => { reject(Error(error)); });
-      }).catch((error) => { reject(Error(error)); });
-    }).catch((error) => { reject(Error(error)); });
-  });
+async function baseSearch(obj, start) {
+  try {
+    const prepared = await prepare(obj, start);
+    const requested = await request(prepared);
+    const parsed = await parse(requested);
+
+    return Object.assign({ uri: prepared.uri }, parsed);
+  } catch (err) {
+    return err;
+  }
 }
 
-function getAll(baseObject, firstFinished) {
-  return new Promise((resolve, reject) => {
-    if (firstFinished.totalResults < firstFinished.itemsPerPage) {
-      resolve(firstFinished);
-    }
-    const extraPages = Math.floor(
+async function getAll(baseObject, firstFinished) {
+  if (firstFinished.totalResults < firstFinished.itemsPerPage) {
+    return firstFinished;
+  }
+  const extraPages = Math.floor(
       firstFinished.totalResults / firstFinished.itemsPerPage);
-    const baseObjectCopy = Object.assign({}, baseObject);
-    const firstFinishedCopy = Object.assign({}, firstFinished);
+  const copy = Object.assign({}, firstFinished);
 
-    let completed = 0;
+  const promises = [];
+  for (let i = 1; i < extraPages + 1; i += 1) {
+    promises.push(baseSearch(baseObject, 100 * 1));
+  }
 
-    for (let i = 1; i < extraPages + 1; i += 1) {
-      baseObjectCopy.start = 100 * i;
-
-      baseSearch(baseObjectCopy)
-        .then((parsed) => {
-          completed += 1;
-          firstFinishedCopy.images = firstFinishedCopy.images.concat(parsed.images);
-          if (completed === extraPages) {
-            firstFinishedCopy.itemsPerPage = firstFinished.totalResults;
-            resolve(firstFinishedCopy);
-          }
-        })
-        .catch((error) => {
-          reject(Error(error));
-        });
-    }
-  });
+  return Promise.all(promises)
+    .then((allSearchResponses) => {
+      allSearchResponses.forEach((searchResponse) => {
+        copy.images = copy.images.concat(searchResponse.images);
+      });
+      return copy;
+    })
+    .catch(error => error);
 }
 
-module.exports = function search(obj) {
-  return new Promise((resolve, reject) => {
-    baseSearch(obj)
-      .then((parsed) => {
-        getAll(obj, parsed)
-          .then((combined) => { resolve(combined); })
-          .catch((error) => { reject(Error(error)); });
-      })
-      .catch((error) => { reject(Error(error)); });
-  });
+module.exports = async function search(obj) {
+  try {
+    const base = await baseSearch(obj);
+    return getAll(obj, base);
+  } catch (error) {
+    return error;
+  }
 };
