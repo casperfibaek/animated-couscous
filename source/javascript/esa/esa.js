@@ -3,7 +3,7 @@ const search = require('./esaSearch');
 const user = require('../credentials');
 
 const today = new Date();
-const lastWeek = new Date(today.setDate(today.getDate() - 60));
+const lastWeek = new Date(today.setDate(today.getDate() - 50));
 
 search({
   credentials: user,
@@ -25,7 +25,7 @@ search({
   sensoroperationalmode: ['SM', 'IW', 'EW'],
   orbitdirection: ['Ascending', 'Descending'],
 })
-  .then(data => console.log(data))
+  .then((data) => { console.log(data); })
   .catch(error => console.error(error));
 
 search({

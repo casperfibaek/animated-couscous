@@ -1,4 +1,3 @@
-/* eslint-disable console, no-loop-func */
 const request = require('request-promise');
 const prepare = require('./esaPrepareSearch');
 const parse = require('./esaParse');
@@ -16,32 +15,41 @@ async function baseSearch(obj, start) {
 }
 
 async function getAll(baseObject, firstFinished) {
+  const copy = Object.assign({}, firstFinished);
   if (firstFinished.totalResults < firstFinished.itemsPerPage) {
-    return firstFinished;
+    delete copy.itemsPerPage;
+    delete copy.startIndex;
+    delete copy.totalResults;
+    return copy;
   }
   const extraPages = Math.floor(
       firstFinished.totalResults / firstFinished.itemsPerPage);
-  const copy = Object.assign({}, firstFinished);
 
-  const promises = [];
-  for (let i = 1; i < extraPages + 1; i += 1) {
-    promises.push(baseSearch(baseObject, 100 * 1));
+  try {
+    const promises = [];
+    for (let i = 1; i < extraPages + 1; i += 1) {
+      promises.push(baseSearch(baseObject, 100 * 1));
+    }
+
+    const all = await Promise.all(promises);
+    for (let v = 0; v < all.length; v += 1) {
+      copy.images = copy.images.concat(all[v].images);
+    }
+    delete copy.itemsPerPage;
+    delete copy.startIndex;
+    delete copy.totalResults;
+
+    return copy;
+  } catch (error) {
+    return error;
   }
-
-  return Promise.all(promises)
-    .then((allSearchResponses) => {
-      allSearchResponses.forEach((searchResponse) => {
-        copy.images = copy.images.concat(searchResponse.images);
-      });
-      return copy;
-    })
-    .catch(error => error);
 }
 
 module.exports = async function search(obj) {
   try {
     const base = await baseSearch(obj);
-    return getAll(obj, base);
+    const all = await getAll(obj, base);
+    return all;
   } catch (error) {
     return error;
   }

@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 module.exports = {
   getOptions: function getOptions(obj, str) {
     let retString = '';
@@ -64,6 +62,7 @@ module.exports = {
     return `"Intersects(POLYGON((${coordinates})))"`;
   },
 
+  /* eslint-disable no-param-reassign */
   mergeESA: function mergeESA(mergeFrom, mergeInto, type = 'str') {
     Object.entries(mergeFrom).forEach((entry) => {
       if (type === 'str') {
@@ -75,6 +74,7 @@ module.exports = {
       }
     });
   },
+  /* eslint-enable no-param-reassign */
 
   footprintToJSON: function footprintToJSON(str) {
     const split = str.split('((')[1].split('))')[0].split(',');
