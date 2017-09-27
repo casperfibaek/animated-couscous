@@ -153,3 +153,7 @@ html{
 .advancedBox{
   border: 1px solid black;
 }
+
+textarea {
+    resize: none;
+}

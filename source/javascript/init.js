@@ -1,5 +1,5 @@
 /* eslint-env browser, node */
-/* eslint-disable no-unused-vars, no-new, no-console */
+/* eslint-disable no-new, no-unused-vars */
 /* globals Vue */
 
 const utils = require('./utils.js');
@@ -8,7 +8,7 @@ const remote = require('electron').remote;
 const app = remote.app;
 const shell = remote.shell;
 
-window.vue = new Vue({ // eslint-disable-line
+window.vue = new Vue({
   el: '#app',
   data: {
     formError: {
@@ -144,6 +144,6 @@ window.vue = new Vue({ // eslint-disable-line
   },
 });
 
-const database = require('../storage/db.js');
+// const database = require('../storage/db.js');
 const esa = require('./esa/esa.js');
 // const maps = require('./maps/maps.js');
