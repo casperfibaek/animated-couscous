@@ -25,8 +25,8 @@ window.vue = new Vue({
     },
     pages: {
       login: false,
-      sites: false,
-      createSite_S1: true,
+      sites: true,
+      createSite_S1: false,
       createSite_S2: false,
     },
     modals: {
@@ -144,6 +144,6 @@ window.vue = new Vue({
   },
 });
 
-// const database = require('../storage/db.js');
+const database = require('../storage/db.js');
 const esa = require('./esa/esa.js');
 // const maps = require('./maps/maps.js');
