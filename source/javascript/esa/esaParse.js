@@ -1,6 +1,6 @@
 const utils = require('./esaUtils');
 
-module.exports = async function parse(obj) {
+module.exports = function parse(obj) {
   if (!obj.feed) { return Error('Unable to parse'); }
   const feed = obj.feed;
 

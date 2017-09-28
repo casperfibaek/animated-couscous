@@ -4,11 +4,14 @@ const parse = require('./esaParse');
 
 async function baseSearch(obj, start) {
   try {
-    const prepared = await prepare(obj, start);
+    const prepared = prepare(obj, start);
     const requested = await request(prepared);
-    const parsed = await parse(requested);
+    const parsed = parse(requested);
 
-    return Object.assign({ uri: prepared.uri }, parsed);
+    const copy = Object.assign({}, parsed);
+    copy.uri = prepared.uri;
+
+    return copy;
   } catch (err) {
     return err;
   }
@@ -49,7 +52,8 @@ module.exports = async function search(obj) {
   try {
     const base = await baseSearch(obj);
     const all = await getAll(obj, base);
-    return all;
+    const test = async _all => _all;
+    return test(all);
   } catch (error) {
     return error;
   }

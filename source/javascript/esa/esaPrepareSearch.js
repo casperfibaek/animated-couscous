@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const esaUtils = require('./esaUtils.js');
 
-module.exports = async function prepare(obj, start) {
+module.exports = function prepare(obj, start) {
   if (!obj.credentials) {
     return Error('please specify credentials');
   }

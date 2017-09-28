@@ -10,6 +10,11 @@ const url = require('url');
 
 require('electron-reload')(__dirname);
 
+process.on('unhandledRejection', (err) => {
+  console.error(err);
+  process.exit(1);
+});
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
