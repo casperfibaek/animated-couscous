@@ -1,4 +1,4 @@
-const request = require('request-promise');
+const request = require('request-promise-native');
 const prepare = require('./esaPrepareSearch');
 const parse = require('./esaParse');
 
@@ -52,8 +52,7 @@ module.exports = async function search(obj) {
   try {
     const base = await baseSearch(obj);
     const all = await getAll(obj, base);
-    const test = async _all => _all;
-    return test(all);
+    return all;
   } catch (error) {
     return error;
   }

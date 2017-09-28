@@ -4,12 +4,10 @@
 const search = require('./esaSearch');
 const testSearches = require('./esaTestSearch');
 
-search(testSearches.s1)
-  .then((res1) => {
-    console.log(res1);
-  });
-
-search(testSearches.s2)
-  .then((res2) => {
-    console.log(res2);
-  });
+(async () => {
+  const d1 = await Promise.all([
+    search(testSearches.s1),
+    search(testSearches.s2),
+  ]);
+  console.log(d1);
+})();

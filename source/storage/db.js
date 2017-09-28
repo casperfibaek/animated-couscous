@@ -4,7 +4,7 @@
 // in order to build the database it is necessary to build it using the below command.
 // It is possibly required to install vs2015 default.
 
-// npm install sqlite3 --build-from-source --runtime=electron --target=1.8.0 --dist-url=https://atom.io/download/electron
+// npm install sqlite3 --build-from-source --runtime=electron --target=1.7.6 --dist-url=https://atom.io/download/electron
 const sqlite3 = require('sqlite3');
 const path = require('path');
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const electron = require('electron');
 
 // Module to control application life.
@@ -12,7 +13,10 @@ require('electron-reload')(__dirname);
 
 process.on('unhandledRejection', (err) => {
   console.error(err);
-  process.exit(1);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error(err);
 });
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -63,6 +67,10 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+app.on('error', (error) => {
+  console.error(error);
 });
 
 app.on('activate', () => {
