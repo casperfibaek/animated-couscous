@@ -4,10 +4,21 @@
 // It is possibly required to install vs2015 default.
 
 // npm install sqlite3 --build-from-source --runtime=electron --target=1.7.6 --dist-url=https://atom.io/download/electron
-const sqlite3 = require('sqlite3');
+const sqlite = require('sqlite3');
 const path = require('path');
+const fs = require('fs');
+const remote = require('electron').remote;  // eslint-disable-line
 
-const dbPath = path.join(__dirname, './common.db');
+const appPath = remote.app.getPath('userData');
+const dbFolder = path.join(appPath, '/database');
+
+if (!fs.existsSync(dbFolder)) { fs.mkdirSync(dbFolder); }
+
+const dbPath = path.join(dbFolder, '/simple.db');
+console.log(dbPath);
+
+// const dbPath = path.join(__dirname, './common.db');
+
 
 /*
   sqlite3.OPEN_READONLY: open the database for read-only.
@@ -16,28 +27,47 @@ const dbPath = path.join(__dirname, './common.db');
 */
 
 function test(callback) {
-  const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
-    if (err) { console.log(err); }
-    console.log('Connected to the database.');
+  let db = new sqlite.Database(dbPath, sqlite.OPEN_READWRITE, (err) => {
+    if (err) {
+      console.log('could not connect to database, creating new');
+
+      db = new sqlite.Database(dbPath);
+
+      db.serialize(() => {
+        db.run('CREATE TABLE lorem (info TEXT)');
+
+        const stmt = db.prepare('INSERT INTO lorem VALUES (?)');
+        for (let i = 0; i < 10; i += 1) {
+          stmt.run(`Ipsum ${i}`);
+        }
+        stmt.finalize();
+
+        db.each('SELECT rowid AS id, info FROM lorem', (rowErr, row) => {
+          if (rowErr) { console.log(rowErr); }
+          console.log(`${row.id}: ${row.info}`);
+        });
+      });
+    } else {
+      db.serialize(() => {
+        db.each(`
+          SELECT *
+          FROM sites
+          `, (rowErr, row) => {
+            if (rowErr) {
+              console.log(rowErr);
+            } else {
+              callback({
+                Name: row.name,
+                Satellite: row.satellite,
+                Latest: row.latest,
+                Start: row.start,
+              });
+            }
+          });
+      });
+    }
   });
 
-  db.serialize(() => {
-    db.each(`
-      SELECT *
-      FROM sites
-      `, (err, row) => {
-        if (err) {
-          console.log(err);
-        } else {
-          callback({
-            Name: row.name,
-            Satellite: row.satellite,
-            Latest: row.latest,
-            Start: row.start,
-          });
-        }
-      });
-  });
 
   db.close((err) => {
     if (err) { console.log(err); } else {
