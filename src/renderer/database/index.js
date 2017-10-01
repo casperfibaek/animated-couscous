@@ -14,7 +14,7 @@ const dbFolder = path.join(appPath, '/database');
 
 if (!fs.existsSync(dbFolder)) { fs.mkdirSync(dbFolder); }
 
-const dbPath = path.join(dbFolder, '/simple.db');
+const dbPath = path.join(dbFolder, '/common.db');
 console.log(dbPath);
 
 // const dbPath = path.join(__dirname, './common.db');
@@ -24,6 +24,21 @@ console.log(dbPath);
   sqlite3.OPEN_READONLY: open the database for read-only.
   sqlite3.OPEN_READWRITE : open the database for reading and writting.
   sqlite3.OPEN_CREATE: open the database, if the database does not exist, create a new database.
+*/
+
+/*
+  TODO:
+    Create a complete database sqlite module
+      - initialize database;
+      - verify database;
+      - insert various infomation;
+      tables:
+        Users
+        Sites (store unique ID of each site)
+        Images (create new short ID from UID)
+
+    '1,2,3,4'.split(',').map(str => Number(str));
+    --> [1,2,3,4];
 */
 
 function test(callback) {
