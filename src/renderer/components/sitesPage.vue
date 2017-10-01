@@ -35,7 +35,7 @@
     name: 'sites-page',
     created() {
       const db = require('../database');
-      db(row => this.addSite(row));
+      // db(row => this.addSite(row));
     },
     computed: {
       sites: function() { return this.$store.getters.sites; },

@@ -11,11 +11,9 @@ export default function parse(obj) {
       const pImage = {
         id: image.id,
         title: image.title,
-        links: {
-          primary: image.link['0'].href,
-          alternative: image.link['1'].href,
-          quicklook: image.link['2'].href,
-        },
+        linkPrimary: image.link['0'].href,
+        linkAlternative: image.link['1'].href,
+        linkQuicklook: image.link['1'].href,
       };
 
       utils.mergeESA(image.date, pImage, 'date');

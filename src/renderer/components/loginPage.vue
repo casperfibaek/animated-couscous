@@ -77,6 +77,9 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
 
               const info = Object.assign({}, userInfo);
               info.Password = password;
+              info.Created = new Date(
+                Number(info.Created.split('(')[1].split(')')[0]));
+              console.log(info);
               this.$store.commit('setCredentials', info);
 
               vm.$router.push({ path: 'sites' });
