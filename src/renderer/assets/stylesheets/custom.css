@@ -65,6 +65,10 @@ a{
   cursor: pointer;
 }
 
+.table-head > span{
+  pointer-events: none;
+}
+
 .siteTable-row{
   cursor: pointer;
 }

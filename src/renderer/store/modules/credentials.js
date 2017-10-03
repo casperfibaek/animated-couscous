@@ -1,16 +1,18 @@
 /* eslint-disable no-shadow, no-console */
+const baseCredentials = {
+  username: '',
+  password: '',
+  email: '',
+  country: '',
+  domain: '',
+  firstname: '',
+  lastname: '',
+  lastLogin: '',
+  userID: '',
+};
+
 const state = {
-  credentials: {
-    username: '',
-    password: '',
-    email: '',
-    country: '',
-    domain: '',
-    firstname: '',
-    lastname: '',
-    lastLogin: '',
-    userID: '',
-  },
+  credentials: baseCredentials,
   isLoggedIn: true, // change to false in dev
 };
 
@@ -22,6 +24,9 @@ const getters = {
 const mutations = {
   setCredentials: (state, credentials) => {
     state.credentials = credentials;
+  },
+  clearCredentials: (state) => {
+    state.credentials = baseCredentials;
   },
   setLoggedIn: (state, boolean = true) => {
     state.isLoggedIn = boolean;

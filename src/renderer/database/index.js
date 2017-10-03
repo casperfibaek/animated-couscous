@@ -48,6 +48,24 @@ function getLatestUser(tableName, max) {
   });
 }
 
+function getUserSites(tableName, obj) {
+  return new Promise((resolve, reject) => {
+    const db = new sqlite.Database(dbPath, {
+      mode: sqlite.OPEN_READONLY,
+    });
+
+    const query = qc.selectEntry(tableName, obj);
+
+    db.all(query, (err, data) => {
+      if (err) {
+        db.close(reject(err));
+      } else {
+        db.close(resolve(data));
+      }
+    });
+  });
+}
+
 function updateUser(userID, obj) {
   return new Promise((resolve, reject) => {
     const db = new sqlite.Database(dbPath, {
@@ -66,13 +84,14 @@ function updateUser(userID, obj) {
   });
 }
 
-function createUser(obj) {
+function insertInto(tableName, obj) {
   return new Promise((resolve, reject) => {
     const db = new sqlite.Database(dbPath, {
       mode: sqlite.OPEN_READWRITE,
     });
 
-    const query = qc.insertInto('users', obj);
+    const query = qc.insertInto(tableName, obj);
+    console.log(query);
 
     db.get(query, (err) => {
       if (err) {
@@ -122,9 +141,10 @@ function initialize() {
 const exportObject = {
   initialize,
   getUser,
+  getUserSites,
   getLatestUser,
   updateUser,
-  createUser,
+  insertInto,
 };
 
 export default exportObject;

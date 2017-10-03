@@ -47,6 +47,7 @@
       logout: function (modal) {
         this.$store.commit('toggleModal', modal);
         this.$store.commit('setLoggedIn', false);
+        this.$store.commit('clearCredentials');
       },
       toggle: function (modal) {
         this.$store.commit('toggleModal', modal);

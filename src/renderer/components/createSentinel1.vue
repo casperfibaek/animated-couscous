@@ -2,13 +2,13 @@
   <div class='empty base'>
   <h6 class="text-bold">Create Sentinel 1 Site</h6>
   <div class="divider"></div>
-  <form class="form-horizontal">
+  <form class="form-horizontal" onsubmit="return false">
     <div class="form-group">
       <div class="col-3">
-        <label class="form-label" for="input-example-1">Name</label>
+        <label class="form-label">Name</label>
       </div>
       <div class="col-9">
-        <input class="form-input" type="text" id="input-example-1" placeholder="Project name">
+        <input class="form-input" type="text" placeholder="Project name" ref="sitename" required>
       </div>
     </div>
     <div class="form-group">
@@ -16,20 +16,20 @@
         <label class="form-label" for="notes">Notes</label>
       </div>
       <div class="col-9">
-        <textarea class="form-input" placeholder="Notes regarding the area" name="notes" rows="3" maxlength="100"></textarea>
+        <textarea class="form-input" placeholder="Notes regarding the area" rows="3" maxlength="100" ref="notes" required></textarea>
       </div>
     </div>
     <div class="form-group">
       <div class="col-3">
-        <label class="form-label" for="frequency">Frequency</label>
+        <label class="form-label">Frequency</label>
       </div>
       <div class="col-9">
-        <select class="form-select" name="frequency">
-          <option>1 hour</option>
-          <option>3 hours</option>
-          <option>6 hours</option>
-          <option selected="selected">12 hours</option>
-          <option>24 hours</option>
+        <select class="form-select" ref="frequency">
+          <option>1</option>
+          <option>3</option>
+          <option>6</option>
+          <option selected="selected">12</option>
+          <option>24</option>
         </select>
       </div>
     </div>
@@ -40,14 +40,14 @@
       <div class="col-1"></div>
       <div class="col-4">
         <label class="form-radio float-left">
-          <input type="radio" name="downloadType" checked>
+          <input type="radio" checked ref="downloadType_metadata" value="metadata">
           <i class="form-icon"></i>
           <span style="font-size: 0.99em;">Metadata</span>
         </label>
       </div>
       <div class="col-4">
         <label class="form-radio float-left">
-          <input type="radio" name="downloadType">
+          <input type="radio" ref="downloadType_files" value="files">
           <i class="form-icon"></i>
           <span style="font-size: 0.99em;">All files</span>
         </label>
@@ -58,7 +58,7 @@
         <label class="form-label"><span>Start date</span></label>
       </div>
       <div class="col-9">
-        <input type="date" class="form-input"></input>
+        <input type="date" class="form-input" ref="startDate"></input>
       </div>
     </div>
     <div class="form-group">
@@ -75,39 +75,49 @@
     <div class="form-group">
       <div class="col-3"></div>
       <div class="col-9">
-        <button class="btn btn-action circle" type="button">
+        <button v-on:click="displayAdvanced" class="btn btn-action circle" type="button">
           <i class="icon icon-arrow-down"></i>
         </button>
         <span>Advanced</span>
       </div>
     </div>
 
+    <section v-show="showAdvanced">
       <div class="divider"></div>
       <div class="form-group">
         <div class="col-3">
           <label class="form-label"><span>Producttype</span></label>
         </div>
-        <div class="col-3">
+        <div class="col-1"></div>
+        <div class="col-2">
           <label class="form-checkbox float-left">
-            <input type="checkbox">
+            <input type="checkbox" ref="producttype_SLC" value="SLC">
               <i class="form-icon col-3"></i>
               <span class="col-9">SLC</span>
             </input>
           </label>
         </div>
-        <div class="col-3">
+        <div class="col-2">
           <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
+            <input type="checkbox" checked ref="producttype_GRD" value="GRD">
               <i class="form-icon col-3"></i>
               <span class="col-9">GRD</span>
             </input>
           </label>
         </div>
-        <div class="col-3">
+        <div class="col-2">
           <label class="form-checkbox float-left">
-            <input type="checkbox">
+            <input type="checkbox" ref="producttype_OCN" value="OCN">
               <i class="form-icon col-3"></i>
               <span class="col-9">OCN</span>
+            </input>
+          </label>
+        </div>
+        <div class="col-2">
+          <label class="form-checkbox float-left">
+            <input type="checkbox" ref="producttype_RAW" value="RAW">
+              <i class="form-icon col-3"></i>
+              <span class="col-9">RAW</span>
             </input>
           </label>
         </div>
@@ -119,46 +129,46 @@
         </div>
         <div class="col-3">
           <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="float-left col-9">HH</span>
-            </input>
-          </label>
-          <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="float-left col-9">VV</span>
-            </input>
-          </label>
-        </div>
-        <div class="col-3">
-          <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="float-left col-9">HV</span>
-            </input>
-          </label>
-          <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="float-left col-9">VH</span>
-            </input>
-          </label>
-        </div>
-        <div class="col-3">
-          <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="float-left col-9 no-wrap">HH VH</span>
-            </input>
-          </label>
-          <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="float-left col-9 no-wrap">VV VH</span>
-            </input>
-          </label>
-        </div>
+            <input type="checkbox" checked ref="polarisationmode_HH" value="HH">
+            <i class="form-icon col-3"></i>
+            <span class="float-left col-9">HH</span>
+          </input>
+        </label>
+        <label class="form-checkbox float-left">
+          <input type="checkbox" checked ref="polarisationmode_VV" value="VV">
+          <i class="form-icon col-3"></i>
+          <span class="float-left col-9">VV</span>
+        </input>
+      </label>
+      </div>
+      <div class="col-3">
+        <label class="form-checkbox float-left">
+          <input type="checkbox" checked ref="polarisationmode_HV" value="HV">
+          <i class="form-icon col-3"></i>
+          <span class="float-left col-9">HV</span>
+        </input>
+      </label>
+      <label class="form-checkbox float-left">
+        <input type="checkbox" checked ref="polarisationmode_VH" value="VH">
+        <i class="form-icon col-3"></i>
+        <span class="float-left col-9">VH</span>
+      </input>
+      </label>
+      </div>
+      <div class="col-3">
+        <label class="form-checkbox float-left">
+          <input type="checkbox" checked ref="polarisationmode_HHVH" value="HH+HV">
+          <i class="form-icon col-3"></i>
+          <span class="float-left col-9 no-wrap">HH VH</span>
+        </input>
+      </label>
+      <label class="form-checkbox float-left">
+        <input type="checkbox" checked ref="polarisationmode_VVVH" value="VV+VH">
+        <i class="form-icon col-3"></i>
+        <span class="float-left col-9 no-wrap">VV VH</span>
+      </input>
+      </label>
+      </div>
       </div>
 
       <div class="form-group">
@@ -167,28 +177,28 @@
         </div>
         <div class="col-3">
           <label class="form-checkbox float-left">
-            <input type="checkbox">
-              <i class="form-icon col-3"></i>
-              <span class="col-9">SM</span>
-            </input>
-          </label>
-        </div>
-        <div class="col-3">
-          <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="col-9">IW</span>
-            </input>
-          </label>
-        </div>
-        <div class="col-3">
-          <label class="form-checkbox float-left">
-            <input type="checkbox">
-              <i class="form-icon col-3"></i>
-              <span class="col-9">EW</span>
-            </input>
-          </label>
-        </div>
+            <input type="checkbox" ref="sensoroperationalmode_SM" value="SM">
+            <i class="form-icon col-3"></i>
+            <span class="col-9">SM</span>
+          </input>
+        </label>
+      </div>
+      <div class="col-3">
+        <label class="form-checkbox float-left">
+          <input type="checkbox" checked ref="sensoroperationalmode_IW" value="IW">
+          <i class="form-icon col-3"></i>
+          <span class="col-9">IW</span>
+        </input>
+      </label>
+      </div>
+      <div class="col-3">
+        <label class="form-checkbox float-left">
+          <input type="checkbox" ref="sensoroperationalmode_EW" value="EW">
+          <i class="form-icon col-3"></i>
+          <span class="col-9">EW</span>
+        </input>
+      </label>
+      </div>
       </div>
 
       <div class="form-group">
@@ -198,21 +208,22 @@
         <div class="col-1"></div>
         <div class="col-4">
           <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="col-9">Acending</span>
-            </input>
-          </label>
-        </div>
-        <div class="col-4">
-          <label class="form-checkbox float-left">
-            <input type="checkbox" checked>
-              <i class="form-icon col-3"></i>
-              <span class="col-9">Decending</span>
-            </input>
-          </label>
-        </div>
+            <input type="checkbox" checked ref="orbitdirection_ascending" value="Ascending">
+            <i class="form-icon col-3"></i>
+            <span class="col-9">Ascending</span>
+          </input>
+        </label>
       </div>
+      <div class="col-4">
+        <label class="form-checkbox float-left">
+          <input type="checkbox" checked ref="orbitdirection_decending" value="Decending">
+          <i class="form-icon col-3"></i>
+          <span class="col-9">Decending</span>
+        </input>
+      </label>
+      </div>
+      </div>
+    </section>
 
   </form>
   <router-link :to="{ path: '/sites' }">
@@ -220,17 +231,117 @@
       <span>Close</span>
     </button>
   </router-link>
-  <button type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom float-right margin-top" data-tooltip="Apply your changes.">
+  <button v-on:click="createSite" type="submit" name="apply" class="btn btn-primary tooltip tooltip-bottom float-right margin-top" data-tooltip="Apply your changes.">
     <span>Apply</span>
   </button>
   </div>
 </template>
 
 <script>
+  import db from '../database';
+
   export default {
     name: 'createSentinel1-page',
-    components: {  },
+    data: function () {
+      return {
+        showAdvanced: false,
+      }
+    },
     methods: {
+      displayAdvanced: function() {
+        this.$data.showAdvanced = !this.$data.showAdvanced;
+      },
+      createSite: function() {
+        if (this.$refs.sitename.value.length === 0) {
+          this.$refs.sitename.focus();
+        } else if (this.$refs.notes.value.length === 0) {
+          this.$refs.notes.focus();
+        } else {
+          const form = {
+            sitename: this.$refs.sitename.value,
+            notes: this.$refs.notes.value,
+            frequency: Number(this.$refs.frequency.value),
+            startDate: new Date(this.$refs.startDate.value).toISOString(),
+            producttype: [],
+            polarisationmode: [],
+            sensoroperationalmode: [],
+            orbitdirection: [],
+          };
+
+          form.downloadType = (this.$refs.downloadType_metadata.checked) ? 'metadata' : 'files';
+
+          const producttypeBoxes = [
+            this.$refs.producttype_SLC,
+            this.$refs.producttype_GRD,
+            this.$refs.producttype_OCN,
+            this.$refs.producttype_RAW,
+          ];
+          producttypeBoxes.forEach((box) => {
+            if(box.checked) { form.producttype.push(box.value); }
+          });
+          form.producttype = form.producttype.toString();
+
+          const polarisationmodeBoxes = [
+            this.$refs.polarisationmode_HH,
+            this.$refs.polarisationmode_VV,
+            this.$refs.polarisationmode_HV,
+            this.$refs.polarisationmode_VH,
+            this.$refs.polarisationmode_HHVH,
+            this.$refs.polarisationmode_VVVH,
+          ];
+          polarisationmodeBoxes.forEach((box) => {
+            if(box.checked) { form.polarisationmode.push(box.value); }
+          });
+          form.polarisationmode = form.polarisationmode.toString();
+
+          const sensoroperationalmodeBoxes = [
+            this.$refs.sensoroperationalmode_SM,
+            this.$refs.sensoroperationalmode_IW,
+            this.$refs.sensoroperationalmode_EW,
+          ];
+          sensoroperationalmodeBoxes.forEach((box) => {
+            if(box.checked) { form.sensoroperationalmode.push(box.value); }
+          });
+          form.sensoroperationalmode = form.sensoroperationalmode.toString();
+
+          const orbitdirectionBoxes = [
+            this.$refs.orbitdirection_ascending,
+            this.$refs.orbitdirection_decending,
+          ];
+          orbitdirectionBoxes.forEach((box) => {
+            if(box.checked) { form.orbitdirection.push(box.value); }
+          });
+          form.orbitdirection = form.orbitdirection.toString();
+
+          form.footprint = {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [[
+                [10.834236145019531, 55.01394956750485],
+                [10.823936462402344, 55.00725599449082],
+                [10.815696716308594, 54.99120655714044],
+                [10.823593139648438, 54.98214514427189],
+                [10.842647552490234, 54.99110807451881],
+                [10.851058959960936, 55.01168568990178],
+                [10.834236145019531, 55.01394956750485],
+              ]],
+            },
+          };
+          form.footprint = JSON.stringify(form.footprint).replace(/"/g, "'");
+          form.satellite = 'Sentinel-1';
+          // geometry
+          // satellite type
+          // lastCheck
+          const userID = this.$store.getters.credentials.userID;
+          form.userID = userID;
+
+          db.insertInto('sites', form)
+            .then(() => console.log(form))
+            .catch(err => console.log(err));
+        }
+      },
     }
   }
 </script>

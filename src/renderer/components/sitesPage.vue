@@ -4,15 +4,45 @@
     <table class="table table-striped table-hover siteTable">
       <thead>
         <tr>
-          <th v-for="(value, key) in sites[0]" sorted="down" class="table-head sites" v-bind:reference="key" v-on:click='sortTable'>
-            <span>{{ key }}</span>
+          <th sorted="down" class="table-head" _ref="sitename" v-on:click='sortTable' sortType="string">
+            <span>Sitename</span>
+          </th>
+          <th sorted="down" class="table-head" _ref="frequency" v-on:click='sortTable' sortType="number">
+            <span>Frequency</span>
+          </th>
+          <th sorted="down" class="table-head" _ref="downloadType" v-on:click='sortTable' sortType="string">
+            <span>Download type</span>
+          </th>
+          <th sorted="down" class="table-head" _ref="startDate" v-on:click='sortTable' sortType="date">
+            <span>Start date</span>
+          </th>
+          <th sorted="down" class="table-head" _ref="lastCheck" v-on:click='sortTable' sortType="date">
+            <span>Last check</span>
+          </th>
+          <th sorted="down" class="table-head" _ref="productType" v-on:click='sortTable' sortType="array">
+            <span>Producttype</span>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for='site in sites' class='siteTable-row'>
-          <td v-for='value in site'>
-            <span>{{ value }}</span>
+          <td>
+            <span>{{ site.sitename }}</span>
+          </td>
+          <td>
+            <span>{{ site.frequency }}</span>
+          </td>
+          <td>
+            <span>{{ site.downloadType }}</span>
+          </td>
+          <td>
+            <span>{{ site.startDate }}</span>
+          </td>
+          <td>
+            <span>{{ site.lastCheck }}</span>
+          </td>
+          <td>
+            <span>{{ site.producttype }}</span>
           </td>
         </tr>
       </tbody>
@@ -31,11 +61,19 @@
 </template>
 
 <script>
+  import db from '../database';
+
   export default {
     name: 'sites-page',
     created() {
-      // const db = require('../database');
-      // db(row => this.addSite(row));
+      const vm = this;
+      vm.$store.commit('clearSites');
+      const userID = this.$store.getters.credentials.userID;
+      db.getUserSites('sites', {userID: userID}).then((data) => {
+        data.forEach((site) => {
+          vm.$store.commit('addSite', site);
+        });
+      });
     },
     computed: {
       sites: function() { return this.$store.getters.sites; },
@@ -45,37 +83,27 @@
         this.$store.commit('addSite', site);
       },
       sortTable: function sortTable(event) {
-        const target = event.target.attributes;
-        const reference = target.reference.nodeValue;
-        const sorted = target.sorted.nodeValue;
+        const attributes = event.target.attributes;
+        const sortType = attributes.sortType.value;
+        const reference = attributes._ref.value;
+        const sorted = attributes.sorted.value;
+        const direction = (sorted === 'down') ? 1 : -1;
 
-        if (sorted === 'down') {
+        let sortFunction = 'dynamicSortAlphabetic';
+        if (sortType === 'date') { sortFunction = 'dynamicSortDates'; }
+        if (sortType === 'number') { sortFunction = 'dynamicSortNumbers'; }
+        if (sortType === 'array') { sortFunction = 'dynamicSortArray'; }
+
+        if (direction === 1) {
           event.target.attributes.sorted.nodeValue = 'up';
-          if (reference === 'Name' || reference === 'Satellite') {
-            this.$store.commit('dynamicSortAlphabetic', {
-              reference: reference,
-              direction: 1,
-            });
-          } else if (reference === 'Latest' || reference === 'Start') {
-            this.$store.commit('dynamicSortDates', {
-              reference: reference,
-              direction: 1,
-            });
-          }
         } else {
           event.target.attributes.sorted.nodeValue = 'down';
-          if (reference === 'Name' || reference === 'Satellite') {
-            this.$store.commit('dynamicSortAlphabetic', {
-              reference: reference,
-              direction: -1,
-            });
-          } else if (reference === 'Latest' || reference === 'Start') {
-            this.$store.commit('dynamicSortDates', {
-              reference: reference,
-              direction: -1,
-            });
-          }
         }
+
+        this.$store.commit(sortFunction, {
+          reference: reference,
+          direction: direction,
+        });
       },
     },
   }

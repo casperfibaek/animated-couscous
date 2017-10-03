@@ -112,7 +112,7 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
               user = await esaLogin(username, password);
               if (user) {
                 user.lastLogin = Math.floor(new Date().getTime() / 1000);
-                const createUser = await db.createUser(user);
+                const createUser = await db.insertInto('users', user);
                 vm.$store.commit('setCredentials', user);
                 vm.$store.commit('setLoggedIn', true);
                 vm.$data.loading = false;

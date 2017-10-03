@@ -13,12 +13,23 @@ const mutations = {
   addSite: (state, site) => {
     state.sites.push(site);
   },
+  clearSites: (state) => {
+    state.sites = [];
+  },
   dynamicSortAlphabetic: (state, options = {}) => {
     state.sites.sort(utils.dynamicSortAlphabetic(
       options.reference, options.direction));
   },
   dynamicSortDates: (state, options = {}) => {
     state.sites.sort(utils.dynamicSortDates(
+      options.reference, options.direction));
+  },
+  dynamicSortNumbers: (state, options = {}) => {
+    state.sites.sort(utils.dynamicSortNumbers(
+      options.reference, options.direction));
+  },
+  dynamicSortArray: (state, options = {}) => {
+    state.sites.sort(utils.dynamicSortArray(
       options.reference, options.direction));
   },
 };
