@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-module.exports = {
+export default {
   users: {
     userID: 'INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE',
     country: 'TEXT NOT NULL',
@@ -9,7 +9,7 @@ module.exports = {
     lastname: 'TEXT NOT NULL',
     username: 'TEXT NOT NULL',
     password: 'TEXT NOT NULL',
-    lastLogin: 'TEXT NOT NULL',
+    lastLogin: 'INTEGER NOT NULL',
   },
   defaultUser: {
     username: 'test',
@@ -19,7 +19,7 @@ module.exports = {
     domain: 'Atmosphere',
     firstname: 'Casey',
     lastname: 'McDermott',
-    lastLogin: '2017-09-02',
+    lastLogin: Math.floor(new Date().getTime() / 1000),
   },
   sites: {
     siteID: 'INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE',

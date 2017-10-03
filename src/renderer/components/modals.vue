@@ -1,6 +1,6 @@
 <template>
   <div class="modals">
-    <menuButton v-if="!modalsMenu"></menuButton>
+    <menuButton v-if="!modalsMenu && isLoggedIn"></menuButton>
     <userMenu v-if="modalsMenu"></userMenu>
     <settings v-if="modalsSettings"></settings>
     <errorToast v-if="modalsError"></errorToast>
@@ -27,6 +27,7 @@
       // createGeometry,
     },
     computed: {
+      isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
       modalsMenu: function() { return this.$store.getters.modalsMenu; },
       modalsSettings: function() { return this.$store.getters.modalsSettings; },
       modalsError: function() { return this.$store.getters.errorStatus; }

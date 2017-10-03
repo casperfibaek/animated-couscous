@@ -1,8 +1,8 @@
 {
-  "name": "migrate-vue",
+  "name": "sentinel-data-manager",
   "version": "0.0.1",
-  "author": "Casper Fibæk <casperfibaek@gmail.com>",
-  "description": "An electron-vue project",
+  "author": "NIRAS @ Casper Fibæk <cfi@niras.dk>",
+  "description": "A tool to manage and update sentinel data",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "migrate-vue",
+    "productName": "sentinel-data-manager",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"
@@ -51,6 +51,7 @@
     }
   },
   "dependencies": {
+    "electron": "^1.7.8",
     "request-promise-native": "^1.0.5",
     "sqlite3": "^3.1.13",
     "vue": "^2.3.3",
@@ -73,7 +74,6 @@
     "css-loader": "^0.28.4",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^1.7.5",
     "electron-builder": "^19.19.1",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",

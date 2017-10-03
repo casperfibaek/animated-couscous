@@ -1,36 +1,35 @@
 /* eslint-disable no-shadow, no-console */
 const state = {
   credentials: {
-    Username: '',
-    Firstname: '',
-    LastName: '',
-    Password: '',
-    Country: '',
+    username: '',
+    password: '',
+    email: '',
+    country: '',
+    domain: '',
+    firstname: '',
+    lastname: '',
+    lastLogin: '',
+    userID: '',
   },
+  isLoggedIn: true, // change to false in dev
 };
 
 const getters = {
   credentials: state => state.credentials,
+  isLoggedIn: state => state.isLoggedIn,
 };
 /* eslint-disable no-param-reassign */
 const mutations = {
   setCredentials: (state, credentials) => {
     state.credentials = credentials;
   },
-  //
+  setLoggedIn: (state, boolean = true) => {
+    state.isLoggedIn = boolean;
+  },
 };
-/* eslint-enable no-param-reassign */
-
-// const actions = {
-//   someAsyncTask({ commit }) {
-//     // do something async
-//     commit('INCREMENT_MAIN_COUNTER');
-//   },
-// };
 
 export default {
   state,
   getters,
   mutations,
-  // actions,
 };

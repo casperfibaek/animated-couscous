@@ -1,10 +1,9 @@
 import Vue from 'vue';
 import vueElectron from 'vue-electron';
 
-import App from './App'; // eslint-disable-line
+import App from './app.vue';
 import router from './router';
 import store from './store';
-
 
 if (!process.env.IS_WEB) { Vue.use(vueElectron); }
 

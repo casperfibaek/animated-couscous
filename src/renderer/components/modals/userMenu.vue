@@ -13,7 +13,7 @@
         </a>
       </li>
       <li class="menu-item">
-        <a href="#/loginPage" v-on:click="toggle('modalsMenu')">
+        <a href="#/loginPage" v-on:click="logout('modalsMenu')">
           <i class="icon icon-arrow-left"></i>
           <span> Logout</span>
         </a>
@@ -34,16 +34,20 @@
     name: 'userMenu-modal',
     computed: {
       Username: function() {
-        return this.$store.getters.credentials.Username;
+        return this.$store.getters.credentials.username;
       },
       FirstName: function() {
-        return this.$store.getters.credentials.FirstName;
+        return this.$store.getters.credentials.firstname;
       },
       LastName: function() {
-        return this.$store.getters.credentials.LastName;
+        return this.$store.getters.credentials.lastname;
       },
     },
     methods: {
+      logout: function (modal) {
+        this.$store.commit('toggleModal', modal);
+        this.$store.commit('setLoggedIn', false);
+      },
       toggle: function (modal) {
         this.$store.commit('toggleModal', modal);
       },

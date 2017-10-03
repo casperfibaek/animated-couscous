@@ -1,63 +1,130 @@
 /* eslint-disable no-console, consistent-return */
-const sqlite = require('sqlite3');
-const path = require('path');
-const fs = require('fs');
-const remote = require('electron').remote;  // eslint-disable-line
-const req = require('./structure');
+import sqlite from 'sqlite3';
+import path from 'path';
+import fs from 'fs';
+import { remote } from 'electron';
+import qc from './queryConstructor';
+import defaultDatabase from './defaultDatabase';
+
+sqlite.verbose();
 
 const appPath = remote.app.getPath('userData');
 const dbFolder = path.join(appPath, '/database');
-
-if (!fs.existsSync(dbFolder)) { fs.mkdirSync(dbFolder); }
 const dbPath = path.join(dbFolder, '/common.db');
-console.log(dbPath);
 
-
-const createTable = function createTable(name, obj) {
-  let columns = '';
-
-  Object.entries(obj)
-    .forEach((arr) => {
-      columns += `${arr[0]} ${arr[1]}, `;
+function getUser(tableName, obj) {
+  return new Promise((resolve, reject) => {
+    const db = new sqlite.Database(dbPath, {
+      mode: sqlite.OPEN_READONLY,
     });
 
-  return `CREATE TABLE ${name} (${columns.slice(0, -2)});`;
-};
+    const query = qc.selectEntry(tableName, obj);
 
-const insert = function insert(table, obj) {
-  let columns = '';
-  let values = '';
-
-  Object.entries(obj).forEach((arr) => {
-    columns += `"${arr[0]}", `;
-    if (Number.isInteger(arr[1])) {
-      values += `${arr[1]}, `;
-    } else {
-      values += `"${arr[1]}", `;
-    }
+    db.get(query, (err, data) => {
+      if (err) {
+        db.close(reject(err));
+      } else {
+        db.close(resolve(data));
+      }
+    });
   });
-
-  return `INSERT INTO ${table} (${columns.slice(0, -2)}) VALUES (${values.slice(0, -2)})`;
-};
-
-try {
-  const db = new sqlite.Database(dbPath);
-
-  db.serialize(() => {
-    db.run(createTable('users', req.users));
-    db.run(insert('users', req.defaultUser));
-
-    db.run(createTable('sites', req.sites));
-    db.run(insert('sites', req.defaultSiteS1));
-    db.run(insert('sites', req.defaultSiteS2));
-
-    db.run(createTable('images', req.images));
-
-    db.close();
-  });
-} catch (err) {
-  console.error(err);
 }
 
+function getLatestUser(tableName, max) {
+  return new Promise((resolve, reject) => {
+    const db = new sqlite.Database(dbPath, {
+      mode: sqlite.OPEN_READONLY,
+    });
 
-export default createTable;
+    const query = qc.selectMax(tableName, max);
+
+    db.get(query, (err, data) => {
+      if (err) {
+        db.close(reject(err));
+      } else {
+        db.close(resolve(data));
+      }
+    });
+  });
+}
+
+function updateUser(userID, obj) {
+  return new Promise((resolve, reject) => {
+    const db = new sqlite.Database(dbPath, {
+      mode: sqlite.OPEN_READWRITE,
+    });
+
+    const query = qc.updateUserValue(userID, obj);
+
+    db.get(query, (err) => {
+      if (err) {
+        db.close(reject(err));
+      } else {
+        db.close(resolve('Completed updateUser'));
+      }
+    });
+  });
+}
+
+function createUser(obj) {
+  return new Promise((resolve, reject) => {
+    const db = new sqlite.Database(dbPath, {
+      mode: sqlite.OPEN_READWRITE,
+    });
+
+    const query = qc.insertInto('users', obj);
+
+    db.get(query, (err) => {
+      if (err) {
+        db.close(reject(err));
+      } else {
+        db.close(resolve('Completed insertInto'));
+      }
+    });
+  });
+}
+
+function initialize() {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(dbPath)) {
+      if (!fs.existsSync(dbFolder)) { fs.mkdirSync(dbFolder); }
+
+      try {
+        const db = new sqlite.Database(dbPath);
+
+        db.serialize(() => {
+          db.run(qc.createTable('users', defaultDatabase.users));
+          db.run(qc.insertInto('users', defaultDatabase.defaultUser));
+          db.run(qc.createTable('sites', defaultDatabase.sites));
+          db.run(qc.insertInto('sites', defaultDatabase.defaultSiteS1));
+          db.run(qc.insertInto('sites', defaultDatabase.defaultSiteS2));
+          db.run(qc.createTable('images', defaultDatabase.images));
+          db.close((err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+      } catch (err) {
+        reject(err);
+      }
+    } else {
+      // TODO: Change this to a function that tests the integrity of the db.
+      // TODO: Create indices
+      console.log('database already created');
+      resolve();
+    }
+  });
+}
+
+const exportObject = {
+  initialize,
+  getUser,
+  getLatestUser,
+  updateUser,
+  createUser,
+};
+
+export default exportObject;

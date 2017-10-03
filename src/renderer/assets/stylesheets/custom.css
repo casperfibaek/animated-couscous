@@ -10,7 +10,7 @@ html{
 	font-family: sans-serif;
   position: absolute;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 a{

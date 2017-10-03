@@ -34,7 +34,7 @@
   export default {
     name: 'sites-page',
     created() {
-      const db = require('../database');
+      // const db = require('../database');
       // db(row => this.addSite(row));
     },
     computed: {
