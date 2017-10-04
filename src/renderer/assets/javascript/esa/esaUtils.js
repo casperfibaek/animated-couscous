@@ -2,7 +2,8 @@ export default {
   getOptions: function getOptions(obj, str) {
     let retString = '';
     if (obj[str]) {
-      const objStr = obj[str];
+      const objStr = (obj[str].length !== 0) ? obj[str].split(',') : '';
+      // console.log(objStr.split(','));
       if (objStr instanceof Array) {
         if (objStr.length !== 0) {
           if (objStr.length === 1) {
@@ -70,7 +71,7 @@ export default {
       } else if (type === 'int') {
         mergeInto[entry[1].name] = Number(entry[1].content);
       } else if (type === 'date') {
-        mergeInto[entry[1].name] = new Date(Date.parse(entry[1].content));
+        mergeInto[entry[1].name] = new Date(Date.parse(entry[1].content)).getTime();
       }
     });
   },

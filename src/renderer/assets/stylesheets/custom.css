@@ -150,6 +150,10 @@ a{
   pointer-events: none;
   user-select: none;
 }
+.siteTable-row > td > span{
+  user-select: none;
+  cursor: pointer;
+}
 
 .nirasSpaceLogo{
   filter: drop-shadow(1px 1px 1px rgba(0,76,100,0.5));

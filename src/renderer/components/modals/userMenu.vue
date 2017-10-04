@@ -19,7 +19,7 @@
         </a>
       </li>
       <li class="divider"></li>
-      <li class="menu-item">
+      <li class="menu-item" v-on:click="closeProgramme">
         <a>
           <i class="icon icon-cross"></i>
           <span> Close Programme</span>
@@ -30,6 +30,9 @@
 </template>
 
 <script>
+  import electron from 'electron';
+  import { remote } from 'electron';
+
   export default {
     name: 'userMenu-modal',
     computed: {
@@ -44,6 +47,9 @@
       },
     },
     methods: {
+      closeProgramme: function() {
+        remote.getCurrentWindow().close();
+      },
       logout: function (modal) {
         this.$store.commit('toggleModal', modal);
         this.$store.commit('setLoggedIn', false);

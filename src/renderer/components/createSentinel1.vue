@@ -8,7 +8,7 @@
         <label class="form-label">Name</label>
       </div>
       <div class="col-9">
-        <input class="form-input" type="text" placeholder="Project name" ref="sitename" required>
+        <input class="form-input" type="text" placeholder="Project name" ref="sitename" required autofocus>
       </div>
     </div>
     <div class="form-group">
@@ -66,7 +66,7 @@
         <label class="form-label"><span>Geometry</span></label>
       </div>
       <div class="col-9">
-        <button v-on:click="toggleModal('modalsCreateGeometry')" type="button" class="form-input btn btn-secondary" v-bind:class="{
+        <button v-on:click="closeCreateGeometry" type="button" class="form-input btn btn-secondary" v-bind:class="{
           'is-success': geometryAdded
         }">
           <span v-if="!geometryAdded">Create Geometry</span>
@@ -242,6 +242,8 @@
 
 <script>
   import db from '../database';
+  import defaultDatabase from '../database/defaultDatabase';
+  import esaSearch from '../assets/javascript/esa/esaSearch';
 
   export default {
     name: 'createSentinel1-page',
@@ -250,14 +252,19 @@
         showAdvanced: false,
       }
     },
+    mounted() {
+      this.$refs.sitename.focus();
+    },
     computed: {
       geometryAdded: function() {
         return this.$store.getters.geometryAdded;
       },
     },
     methods: {
-      toggleModal: function (modal) {
-        this.$store.commit('toggleModal', modal);
+      closeCreateGeometry: function (modal) {
+        this.$store.commit('toggleModal', 'modalsCreateGeometry');
+        this.$store.commit('setGeometryAdded', false);
+        this.$store.commit('setGeometry', null);
       },
       displayAdvanced: function() {
         this.$data.showAdvanced = !this.$data.showAdvanced;
@@ -292,7 +299,7 @@
             sitename: this.$refs.sitename.value,
             notes: this.$refs.notes.value,
             frequency: Number(this.$refs.frequency.value),
-            startDate: new Date(this.$refs.startDate.value).toISOString(),
+            startDate: new Date(this.$refs.startDate.value).getTime(),
             producttype: [],
             polarisationmode: [],
             sensoroperationalmode: [],
@@ -347,25 +354,62 @@
           form.footprint = this.$store.getters.geometry;
           form.footprint = JSON.stringify(form.footprint).replace(/"/g, "'");
           form.satellite = 'Sentinel-1';
-          const userID = this.$store.getters.credentials.userID;
-          form.userID = userID;
+          const credentials = this.$store.getters.credentials;
+          form.userID = credentials.userID;
 
           const vm = this;
 
-          db.insertInto('sites', form)
-            .then(() => {
-              console.log(form);
+          const reset = function() {
+            vm.$store.commit('setGeometryAdded', false);
+            vm.$store.commit('setGeometry', null);
+            vm.$store.commit('setCurrentlyLoading', false);
+            vm.$store.commit('setLoadingMessage', '');
+          };
 
-              // TODO: route to sites and start checking images
+          (async function() {
+            try {
+              vm.$store.commit('setLoadingMessage', 'Inserting into database');
+              await db.insertInto('sites', form);
+              vm.$store.commit('setLoadingMessage', 'Retriving user sites');
+              const sites = await db.getUserSites('sites', {
+                userID: credentials.userID,
+              });
+
+              const searches = [];
+              const siteID = [];
+
+              vm.$store.commit('setLoadingMessage', 'Requesting ESA imagery');
+              sites.forEach((site) => {
+                if(site.lastCheck === null || site.lastCheck === 'null') {
+                  site.username = credentials.username;
+                  site.password = credentials.password;
+                  siteID.push(site.siteID);
+                  searches.push(esaSearch(site));
+                }
+              });
+
+              const allSearches = await Promise.all(searches);
+
+              // update lastCheck
+              await db.updateLastCheck();
+
+              const createImageSites = [];
+
+              vm.$store.commit('setLoadingMessage', 'Inserting images into database');
+              allSearches.forEach((search, index) => {
+                createImageSites.push(
+                  db.createImageSiteAndInsert(`images_${credentials.userID}_${siteID[index]}`, defaultDatabase.images, search.images));
+              });
+
+              const createdAllSites = await Promise.all(createImageSites);
+
               vm.$router.push({ path: 'sites' });
-            })
-            .catch(err => console.log(err))
-            .then(() => {
-              this.$store.commit('setGeometryAdded', false);
-              this.$store.commit('setGeometry', null);
-              this.$store.commit('setCurrentlyLoading', false);
-              this.$store.commit('setLoadingMessage', '');
-            });
+            } catch (err) {
+              console.log(err);
+            } finally {
+              reset();
+            }
+          })();
         }
       },
     }

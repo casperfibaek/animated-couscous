@@ -1,5 +1,5 @@
 /* eslint-disable no-console, consistent-return */
-import sqlite from 'sqlite3';
+import sqlite from 'sqlite3'; // eslint-disable-line
 import path from 'path';
 import fs from 'fs';
 import { remote } from 'electron';
@@ -84,6 +84,24 @@ function updateUser(userID, obj) {
   });
 }
 
+function updateLastCheck() {
+  return new Promise((resolve, reject) => {
+    const db = new sqlite.Database(dbPath, {
+      mode: sqlite.OPEN_READWRITE,
+    });
+
+    const query = qc.updateLastCheck();
+
+    db.run(query, (err) => {
+      if (err) {
+        db.close(reject(err));
+      } else {
+        db.close(resolve('Completed updateLastCheck'));
+      }
+    });
+  });
+}
+
 function insertInto(tableName, obj) {
   return new Promise((resolve, reject) => {
     const db = new sqlite.Database(dbPath, {
@@ -97,6 +115,32 @@ function insertInto(tableName, obj) {
         db.close(reject(err));
       } else {
         db.close(resolve('Completed insertInto'));
+      }
+    });
+  });
+}
+
+function createImageSiteAndInsert(tableName, createObj, insertArray) {
+  return new Promise((resolve, reject) => {
+    const db = new sqlite.Database(dbPath, {
+      mode: sqlite.OPEN_READWRITE,
+    });
+
+    let query;
+
+    const create = qc.createTable(tableName, createObj);
+    if (insertArray.length !== 0) {
+      const insert = qc.insertIntoArray(tableName, insertArray);
+      query = `${create} ${insert}`;
+    } else {
+      query = `${create}`;
+    }
+
+    db.exec(query, (err) => {
+      if (err) {
+        db.close(reject(err));
+      } else {
+        db.close(resolve('create table'));
       }
     });
   });
@@ -116,7 +160,7 @@ function initialize() {
           db.run(qc.createTable('sites', defaultDatabase.sites));
           db.run(qc.insertInto('sites', defaultDatabase.defaultSiteS1));
           db.run(qc.insertInto('sites', defaultDatabase.defaultSiteS2));
-          db.run(qc.createTable('images', defaultDatabase.images));
+
           db.close((err) => {
             if (err) {
               reject(err);
@@ -142,7 +186,9 @@ const exportObject = {
   getUserSites,
   getLatestUser,
   updateUser,
+  updateLastCheck,
   insertInto,
+  createImageSiteAndInsert,
 };
 
 export default exportObject;

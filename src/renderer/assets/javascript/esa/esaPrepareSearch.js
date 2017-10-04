@@ -2,8 +2,11 @@
 import utils from './esaUtils';
 
 export default function prepare(obj, start) {
-  if (!obj.credentials) {
-    return Error('please specify credentials');
+  if (!obj.username) {
+    return Error('please specify username');
+  }
+  if (!obj.password) {
+    return Error('please specify password');
   }
   if (!obj.satellite) {
     return Error('please specify satellite');
@@ -11,8 +14,8 @@ export default function prepare(obj, start) {
   if (!obj.footprint) {
     return Error('please supply a footprint (polygon)');
   }
-  if (!obj.from) {
-    return Error('please specify a from date (ISO8601)');
+  if (!obj.startDate && !obj.lastCheck) {
+    return Error('please specify a from date (INTEGER)');
   }
 
   const satellite = obj.satellite;
@@ -22,32 +25,30 @@ export default function prepare(obj, start) {
 
   let footprint;
   try {
-    footprint = utils.geoJsonToESA(obj.footprint);
+    footprint = utils.geoJsonToESA(JSON.parse(obj.footprint.replace(/'/g, '"')));
   } catch (error) {
     return Error(error);
   }
 
-  const credentials = obj.credentials;
-  const from = obj.from;
-
   const baseURL = 'https://scihub.copernicus.eu/dhus/search?q=';
+  const from = (obj.lastCheck) ? obj.lastCheck : obj.startDate;
 
   const queryOptions = {
     platform: `platformname:${satellite}`,
     footprint: ` AND footprint:${footprint}`,
     producttype: (obj.producttype) ?
       utils.getOptions(obj, 'producttype') : '',
-    time: ` AND beginposition:[${from} TO NOW]`,
+    time: ` AND beginposition:[${new Date(from).toISOString()} TO NOW]`,
   };
 
-  if (satellite === 'S1' || satellite === 's1') {
+  if (satellite === 'Sentinel-1') {
     queryOptions.polarisationmode = (obj.polarisationmode) ?
       utils.getOptions(obj, 'polarisationmode') : '';
     queryOptions.sensoroperationalmode = (obj.sensoroperationalmode) ?
       utils.getOptions(obj, 'sensoroperationalmode') : '';
     queryOptions.orbitdirection = (obj.orbitdirection) ?
       utils.getOptions(obj, 'orbitdirection') : '';
-  } else if (satellite === 'S2' || satellite === 's2') {
+  } else if (satellite === 'Sentinel-2') {
     queryOptions.cloudcoverpercentage = (obj.cloudcoverpercentage) ?
       ` AND cloudcoverpercentage:[0 TO ${obj.cloudcoverpercentage}]` : '';
   }
@@ -64,7 +65,10 @@ export default function prepare(obj, start) {
     uri: baseURL +
           utils.objToString(queryOptions) +
           utils.objToString(basicOptions),
-    auth: credentials,
+    auth: {
+      user: obj.username,
+      pass: obj.password,
+    },
     json: true,
   };
 }

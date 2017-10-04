@@ -8,6 +8,11 @@
 <script>
   export default {
     name: 'errorToast-modal',
+    mounted() {
+      setTimeout(() => {
+        this.$store.commit('errorStatusToggleOff');
+      }, 10 * 1000);
+    },
     computed: {
       errorMessage: function() { return this.$store.getters.errorMessage; },
     },

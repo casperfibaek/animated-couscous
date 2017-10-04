@@ -1,3 +1,5 @@
+import sortObj from 'sort-object';
+
 function createTable(tableName, obj) {
   let columns = '';
 
@@ -22,7 +24,35 @@ function insertInto(tableName, obj) {
     }
   });
 
-  return `INSERT INTO ${tableName} (${columns.slice(0, -2)}) VALUES (${values.slice(0, -2)})`;
+  return `INSERT INTO ${tableName} (${columns.slice(0, -2)}) VALUES (${values.slice(0, -2)});`;
+}
+
+function insertIntoArray(tableName, arr) {
+  let columns = '';
+  let values = '';
+
+  Object.entries(sortObj(arr[0])).forEach((entry) => {
+    columns += `"${entry[0]}", `;
+  });
+
+  arr.forEach((row) => {
+    let _row = '';
+
+    const sorted = sortObj(row);
+
+    Object.entries(sorted).forEach((entry) => {
+      if (Number.isInteger(entry[1]) || entry[1] === null) {
+        _row += `${entry[1]}, `;
+      } else {
+        // ESCAPE CHARACTER
+        _row += `"${entry[1].replace(/"/g, "'")}", `;
+      }
+    });
+    values += `(${_row.slice(0, -2)}), `;
+  });
+
+  const final = `INSERT OR IGNORE INTO ${tableName} (${columns.slice(0, -2)}) VALUES ${values.slice(0, -2)};`;
+  return final;
 }
 
 function selectEntry(tableName, obj) {
@@ -63,12 +93,18 @@ function updateUserValue(userID, obj) {
   return `UPDATE users SET ${updates.slice(0, -5)} WHERE userID = "${userID}"`;
 }
 
+function updateLastCheck() {
+  return `UPDATE sites SET lastCheck = ${new Date().getTime()} WHERE lastCheck IS NULL OR lastCheck = ''`;
+}
+
 const exportObject = {
   createTable,
   insertInto,
+  insertIntoArray,
   selectEntry,
   selectMax,
   updateUserValue,
+  updateLastCheck,
 };
 
 export default exportObject;

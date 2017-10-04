@@ -9,6 +9,8 @@ async function baseSearch(obj, start) {
     const requested = await request(prepared);
     const parsed = parse(requested);
 
+    console.log(`Fetching ${parsed.totalResults} images from ESA..`);
+
     const copy = Object.assign({}, parsed);
     copy.uri = prepared.uri;
 

@@ -16,10 +16,10 @@
           <th sorted="down" class="table-head" _ref="downloadtype" v-on:click='sortTable' sortType="string">
             <span>Download type</span>
           </th>
-          <th sorted="down" class="table-head" _ref="startDate" v-on:click='sortTable' sortType="date">
+          <th sorted="down" class="table-head" _ref="startDate" v-on:click='sortTable' sortType="number">
             <span>Start date</span>
           </th>
-          <th sorted="down" class="table-head" _ref="lastCheck" v-on:click='sortTable' sortType="date">
+          <th sorted="down" class="table-head" _ref="lastCheck" v-on:click='sortTable' sortType="number">
             <span>Last check</span>
           </th>
           <th sorted="down" class="table-head" _ref="producttype" v-on:click='sortTable' sortType="array">
@@ -42,10 +42,10 @@
             <span>{{ site.downloadtype }}</span>
           </td>
           <td>
-            <span>{{ site.startDate }}</span>
+            <span>{{ parseDate(site.startDate) }}</span>
           </td>
           <td>
-            <span>{{ site.lastCheck }}</span>
+            <span>{{ parseDate(site.lastCheck) }}</span>
           </td>
           <td>
             <span>{{ site.producttype }}</span>
@@ -82,10 +82,17 @@
       });
     },
     computed: {
-      sites: function() { return this.$store.getters.sites; },
+      sites: function() {
+        return this.$store.getters.sites;
+      },
     },
     methods: {
-      addSite: function (site) {
+      parseDate: function(int) {
+        if (int === null || int === 'null') { return 'NA'}
+        const parsed = new Date(int);
+        return `${parsed.getDay()+1}/${parsed.getMonth()+1}-${parsed.getFullYear()}`;
+      },
+      addSite: function(site) {
         this.$store.commit('addSite', site);
       },
       sortTable: function sortTable(event) {
@@ -96,7 +103,6 @@
         const direction = (sorted === 'down') ? 1 : -1;
 
         let sortFunction = 'dynamicSortAlphabetic';
-        if (sortType === 'date') { sortFunction = 'dynamicSortDates'; }
         if (sortType === 'number') { sortFunction = 'dynamicSortNumbers'; }
         if (sortType === 'array') { sortFunction = 'dynamicSortArray'; }
 
