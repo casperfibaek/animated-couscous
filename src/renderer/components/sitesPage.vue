@@ -7,10 +7,13 @@
           <th sorted="down" class="table-head" _ref="sitename" v-on:click='sortTable' sortType="string">
             <span>Sitename</span>
           </th>
+          <th sorted="down" class="table-head" _ref="satellite" v-on:click='sortTable' sortType="string">
+            <span>Satellite</span>
+          </th>
           <th sorted="down" class="table-head" _ref="frequency" v-on:click='sortTable' sortType="number">
             <span>Frequency</span>
           </th>
-          <th sorted="down" class="table-head" _ref="downloadType" v-on:click='sortTable' sortType="string">
+          <th sorted="down" class="table-head" _ref="downloadtype" v-on:click='sortTable' sortType="string">
             <span>Download type</span>
           </th>
           <th sorted="down" class="table-head" _ref="startDate" v-on:click='sortTable' sortType="date">
@@ -19,7 +22,7 @@
           <th sorted="down" class="table-head" _ref="lastCheck" v-on:click='sortTable' sortType="date">
             <span>Last check</span>
           </th>
-          <th sorted="down" class="table-head" _ref="productType" v-on:click='sortTable' sortType="array">
+          <th sorted="down" class="table-head" _ref="producttype" v-on:click='sortTable' sortType="array">
             <span>Producttype</span>
           </th>
         </tr>
@@ -30,10 +33,13 @@
             <span>{{ site.sitename }}</span>
           </td>
           <td>
-            <span>{{ site.frequency }}</span>
+            <span>{{ site.satellite }}</span>
           </td>
           <td>
-            <span>{{ site.downloadType }}</span>
+            <span class="float-right">{{ site.frequency }}</span>
+          </td>
+          <td>
+            <span>{{ site.downloadtype }}</span>
           </td>
           <td>
             <span>{{ site.startDate }}</span>

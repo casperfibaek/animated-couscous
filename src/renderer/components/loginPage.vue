@@ -121,7 +121,6 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
               }
             }
           } catch (err) {
-            console.log(err);
             this.$store.commit('errorStatusToggleOn');
             this.$store.commit('errorSetMessage', err.message);
             this.$data.loading = false;

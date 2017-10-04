@@ -38,6 +38,7 @@ export default async function(username, password) {  // eslint-disable-line
     clearTimeout(esaResponseTimeout);
     return userInfo;
   } catch (err) {
+    clearTimeout(esaResponseTimeout);
     if (err.statusCode && err.statusCode === 401) {
       throw Error('Incorrect username or password');
     } else {

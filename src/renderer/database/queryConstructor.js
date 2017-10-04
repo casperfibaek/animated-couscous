@@ -15,7 +15,7 @@ function insertInto(tableName, obj) {
 
   Object.entries(obj).forEach((arr) => {
     columns += `"${arr[0]}", `;
-    if (Number.isInteger(arr[1])) {
+    if (Number.isInteger(arr[1]) || arr[1] === null) {
       values += `${arr[1]}, `;
     } else {
       values += `"${arr[1]}", `;
@@ -31,7 +31,7 @@ function selectEntry(tableName, obj) {
   Object.entries(obj).forEach((arr) => {
     selection += `${arr[0]} = `;
 
-    if (Number.isInteger(arr[1])) {
+    if (Number.isInteger(arr[1]) || arr[1] === null) {
       selection += `${arr[1]} AND `;
     } else {
       selection += `"${arr[1]}" AND `;
@@ -41,10 +41,10 @@ function selectEntry(tableName, obj) {
   return `SELECT * FROM ${tableName} WHERE (${selection.slice(0, -5)});`;
 }
 
-function selectMax(tableName, max) {
-  const selection = `SELECT max(${max}) FROM ${tableName}`;
+function selectMax(tableName, maxColumn) {
+  const selection = `SELECT max(${maxColumn}) FROM ${tableName}`;
 
-  return `SELECT * FROM ${tableName} WHERE ${max} = (${selection});`;
+  return `SELECT * FROM ${tableName} WHERE ${maxColumn} = (${selection});`;
 }
 
 function updateUserValue(userID, obj) {
@@ -53,7 +53,7 @@ function updateUserValue(userID, obj) {
   Object.entries(obj).forEach((arr) => {
     updates += `${arr[0]} = `;
 
-    if (Number.isInteger(arr[1])) {
+    if (Number.isInteger(arr[1]) || arr[1] === null) {
       updates += `${arr[1]} AND `;
     } else {
       updates += `"${arr[1]}" AND `;

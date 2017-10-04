@@ -13,6 +13,9 @@ const mutations = {
   errorStatusToggleOn: (state) => {
     state.errorStatus = true;
   },
+  errorStatusToggleOff: (state) => {
+    state.errorStatus = false;
+  },
   errorSetMessage: (state, message) => {
     state.errorMessage = message;
   },

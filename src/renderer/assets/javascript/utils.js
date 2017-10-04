@@ -38,6 +38,9 @@ module.exports = {
 
     return function sort(a, b) {
       let result;
+      if (a[property] === null && b[property] === null) { return 0; }
+      if (a[property] === null) { return -1; }
+      if (b[property] === null) { return 1; }
       const A = Date.parse(a[property].split('-').toString());
       const B = Date.parse(b[property].split('-').toString());
       if (A < B) {
@@ -81,8 +84,8 @@ module.exports = {
     }
 
     return function sort(a, b) {
-      const A = a.toString().toLowerCase();
-      const B = b.toString().toLowerCase();
+      const A = a[property].toString().toLowerCase();
+      const B = b[property].toString().toLowerCase();
 
       let result;
       if (A < B) {

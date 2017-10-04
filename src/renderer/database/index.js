@@ -91,7 +91,6 @@ function insertInto(tableName, obj) {
     });
 
     const query = qc.insertInto(tableName, obj);
-    console.log(query);
 
     db.get(query, (err) => {
       if (err) {
@@ -132,7 +131,6 @@ function initialize() {
     } else {
       // TODO: Change this to a function that tests the integrity of the db.
       // TODO: Create indices
-      console.log('database already created');
       resolve();
     }
   });

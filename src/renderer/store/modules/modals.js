@@ -2,16 +2,18 @@
 const state = {
   modalsMenu: false,
   modalsSettings: false,
+  modalsCreateGeometry: false,
 };
 
 const getters = {
   modalsMenu: state => state.modalsMenu,
   modalsSettings: state => state.modalsSettings,
+  modalsCreateGeometry: state => state.modalsCreateGeometry,
 };
 /* eslint-disable no-param-reassign */
 const mutations = {
-  toggleModal: (state, n) => {
-    (state[n] = !state[n]);
+  toggleModal: (state, modal) => {
+    (state[modal] = !state[modal]);
   },
   classEventListener: (state, clicked) => {
     if (clicked.class === 'modal-overlay') {

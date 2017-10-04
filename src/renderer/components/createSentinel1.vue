@@ -40,14 +40,14 @@
       <div class="col-1"></div>
       <div class="col-4">
         <label class="form-radio float-left">
-          <input type="radio" checked ref="downloadType_metadata" value="metadata">
+          <input type="radio" checked ref="downloadtype_metadata" value="metadata">
           <i class="form-icon"></i>
           <span style="font-size: 0.99em;">Metadata</span>
         </label>
       </div>
       <div class="col-4">
         <label class="form-radio float-left">
-          <input type="radio" ref="downloadType_files" value="files">
+          <input type="radio" ref="downloadtype_files" value="files">
           <i class="form-icon"></i>
           <span style="font-size: 0.99em;">All files</span>
         </label>
@@ -66,8 +66,11 @@
         <label class="form-label"><span>Geometry</span></label>
       </div>
       <div class="col-9">
-        <button type="button" class="form-input btn btn-secondary">
-          <span>Create Geometry</span>
+        <button v-on:click="toggleModal('modalsCreateGeometry')" type="button" class="form-input btn btn-secondary" v-bind:class="{
+          'is-success': geometryAdded
+        }">
+          <span v-if="!geometryAdded">Create Geometry</span>
+          <span v-if="geometryAdded">Geometry Attached</span>
         </button>
       </div>
     </div>
@@ -247,16 +250,44 @@
         showAdvanced: false,
       }
     },
+    computed: {
+      geometryAdded: function() {
+        return this.$store.getters.geometryAdded;
+      },
+    },
     methods: {
+      toggleModal: function (modal) {
+        this.$store.commit('toggleModal', modal);
+      },
       displayAdvanced: function() {
         this.$data.showAdvanced = !this.$data.showAdvanced;
+      },
+      setCurrentlyLoading: function (boolean) {
+        this.$store.commit('setCurrentlyLoading', boolean);
       },
       createSite: function() {
         if (this.$refs.sitename.value.length === 0) {
           this.$refs.sitename.focus();
+          this.$refs.sitename.classList.add('is-error');
         } else if (this.$refs.notes.value.length === 0) {
           this.$refs.notes.focus();
+          this.$refs.sitename.classList.remove('is-error');
+          this.$refs.notes.classList.add('is-error');
+        } else if (!this.$refs.startDate.value) {
+          this.$refs.sitename.classList.remove('is-error');
+          this.$refs.notes.classList.remove('is-error');
+          this.$refs.startDate.focus();
+          this.$refs.startDate.classList.add('is-error');
+        } else if (!this.$store.getters.geometryAdded) {
+          this.$store.commit('errorStatusToggleOn');
+          this.$store.commit('errorSetMessage', 'Please attach geometry');
         } else {
+          this.$store.commit('setCurrentlyLoading', true);
+          this.$store.commit('setLoadingMessage', 'Adding site to local DB');
+
+          this.$refs.sitename.classList.remove('is-error');
+          this.$refs.notes.classList.remove('is-error');
+          this.$refs.startDate.classList.remove('is-error');
           const form = {
             sitename: this.$refs.sitename.value,
             notes: this.$refs.notes.value,
@@ -268,7 +299,7 @@
             orbitdirection: [],
           };
 
-          form.downloadType = (this.$refs.downloadType_metadata.checked) ? 'metadata' : 'files';
+          form.downloadtype = (this.$refs.downloadtype_metadata.checked) ? 'metadata' : 'files';
 
           const producttypeBoxes = [
             this.$refs.producttype_SLC,
@@ -313,39 +344,30 @@
           });
           form.orbitdirection = form.orbitdirection.toString();
 
-          form.footprint = {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Polygon',
-              coordinates: [[
-                [10.834236145019531, 55.01394956750485],
-                [10.823936462402344, 55.00725599449082],
-                [10.815696716308594, 54.99120655714044],
-                [10.823593139648438, 54.98214514427189],
-                [10.842647552490234, 54.99110807451881],
-                [10.851058959960936, 55.01168568990178],
-                [10.834236145019531, 55.01394956750485],
-              ]],
-            },
-          };
+          form.footprint = this.$store.getters.geometry;
           form.footprint = JSON.stringify(form.footprint).replace(/"/g, "'");
           form.satellite = 'Sentinel-1';
-          // geometry
-          // satellite type
-          // lastCheck
           const userID = this.$store.getters.credentials.userID;
           form.userID = userID;
 
+          const vm = this;
+
           db.insertInto('sites', form)
-            .then(() => console.log(form))
-            .catch(err => console.log(err));
+            .then(() => {
+              console.log(form);
+
+              // TODO: route to sites and start checking images
+              vm.$router.push({ path: 'sites' });
+            })
+            .catch(err => console.log(err))
+            .then(() => {
+              this.$store.commit('setGeometryAdded', false);
+              this.$store.commit('setGeometry', null);
+              this.$store.commit('setCurrentlyLoading', false);
+              this.$store.commit('setLoadingMessage', '');
+            });
         }
       },
     }
   }
 </script>
-
-<style>
-
-</style>

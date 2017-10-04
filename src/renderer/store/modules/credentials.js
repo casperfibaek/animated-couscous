@@ -8,7 +8,7 @@ const baseCredentials = {
   firstname: '',
   lastname: '',
   lastLogin: '',
-  userID: '',
+  userID: null,
 };
 
 const state = {

@@ -27,6 +27,8 @@
 </script>
 
 <style>
+  @import url('./assets/stylesheets/leaflet.css');
+  @import url('./assets/stylesheets/leaflet.pm.css');
   @import url('./assets/stylesheets/spectre.min.css');
   @import url('./assets/stylesheets/spectre-icons.min.css');
   @import url('./assets/stylesheets/custom.css');

@@ -4,7 +4,8 @@
     <userMenu v-if="modalsMenu"></userMenu>
     <settings v-if="modalsSettings"></settings>
     <errorToast v-if="modalsError"></errorToast>
-    <!-- <createGeometry></createGeometry> -->
+    <loading v-if="currentlyLoading"></loading>
+    <createGeometry v-if="modalsCreateGeometry"></createGeometry>
   </div>
 </template>
 
@@ -13,9 +14,8 @@
   import userMenu from './modals/userMenu';
   import settings from './modals/settings';
   import errorToast from './modals/errorToast';
-  // import createGeometry from './components/modals/createGeometry';
-
-  // import esa from './assets/javascript/esa/esa';
+  import loading from './modals/loading';
+  import createGeometry from './modals/createGeometry';
 
   export default {
     name: 'migrate-vue',
@@ -24,13 +24,20 @@
       userMenu,
       settings,
       errorToast,
-      // createGeometry,
+      loading,
+      createGeometry,
     },
     computed: {
       isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
       modalsMenu: function() { return this.$store.getters.modalsMenu; },
       modalsSettings: function() { return this.$store.getters.modalsSettings; },
-      modalsError: function() { return this.$store.getters.errorStatus; }
+      modalsCreateGeometry: function() {
+        return this.$store.getters.modalsCreateGeometry;
+      },
+      modalsError: function() { return this.$store.getters.errorStatus; },
+      currentlyLoading: function() {
+        return this.$store.getters.currentlyLoading;
+      },
     },
   };
 </script>
