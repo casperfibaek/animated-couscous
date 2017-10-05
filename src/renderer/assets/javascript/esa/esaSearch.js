@@ -12,10 +12,7 @@ async function baseSearch(obj, start) {
 
     store.commit('setLoadingMessage', `Fetching ${parsed.totalResults} images from ESA..`);
 
-    const copy = Object.assign({}, parsed);
-    copy.uri = prepared.uri;
-
-    return copy;
+    return parsed;
   } catch (err) {
     return err;
   }
@@ -35,7 +32,7 @@ async function getAll(baseObject, firstFinished) {
   try {
     const promises = [];
     for (let i = 1; i < extraPages + 1; i += 1) {
-      promises.push(baseSearch(baseObject, 100 * 1));
+      promises.push(baseSearch(baseObject, 100 * i));
     }
 
     const all = await Promise.all(promises);
