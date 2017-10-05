@@ -2,8 +2,13 @@ export default {
   getOptions: function getOptions(obj, str) {
     let retString = '';
     if (obj[str]) {
-      const objStr = (obj[str].length !== 0) ? obj[str].split(',') : '';
-      // console.log(objStr.split(','));
+      let objStr;
+      if (Array.isArray(obj[str])) {
+        objStr = obj[str];
+      } else {
+        objStr = (obj[str].length !== 0) ? obj[str].split(',') : '';
+      }
+
       if (objStr instanceof Array) {
         if (objStr.length !== 0) {
           if (objStr.length === 1) {

@@ -6,6 +6,7 @@ const state = {
 
 const getters = {
   geometryAdded: state => state.geometryAdded,
+  geometryPrepared: state => JSON.stringify(state.geometry).replace(/"/g, "'"),
   geometry: state => state.geometry,
 };
 /* eslint-disable no-param-reassign */

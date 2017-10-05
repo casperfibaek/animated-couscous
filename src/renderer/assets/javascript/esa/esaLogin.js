@@ -18,7 +18,7 @@ export default async function(username, password) {  // eslint-disable-line
 
   const esaResponseTimeout = setTimeout(() => {
     throw Error('ESA took too long to respond');
-  }, 30 * 1000);
+  }, 45 * 1000);
 
   try {
     const user = await request({

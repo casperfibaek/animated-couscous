@@ -1,5 +1,6 @@
 import prepare from './esaPrepareSearch';
 import parse from './esaParse';
+import store from './../../../store';
 
 const request = require('request-promise-native');
 
@@ -9,7 +10,7 @@ async function baseSearch(obj, start) {
     const requested = await request(prepared);
     const parsed = parse(requested);
 
-    console.log(`Fetching ${parsed.totalResults} images from ESA..`);
+    store.commit('setLoadingMessage', `Fetching ${parsed.totalResults} images from ESA..`);
 
     const copy = Object.assign({}, parsed);
     copy.uri = prepared.uri;

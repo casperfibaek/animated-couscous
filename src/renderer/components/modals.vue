@@ -18,7 +18,7 @@
   import createGeometry from './modals/createGeometry';
 
   export default {
-    name: 'migrate-vue',
+    name: 'modals-page',
     components: {
       menuButton,
       userMenu,

@@ -41,7 +41,7 @@ function insertIntoArray(tableName, arr) {
     const sorted = sortObj(row);
 
     Object.entries(sorted).forEach((entry) => {
-      if (Number.isInteger(entry[1]) || entry[1] === null) {
+      if (typeof entry[1] === 'number' || entry[1] === null) {
         _row += `${entry[1]}, `;
       } else {
         // ESCAPE CHARACTER
@@ -93,8 +93,8 @@ function updateUserValue(userID, obj) {
   return `UPDATE users SET ${updates.slice(0, -5)} WHERE userID = "${userID}"`;
 }
 
-function updateLastCheck() {
-  return `UPDATE sites SET lastCheck = ${new Date().getTime()} WHERE lastCheck IS NULL OR lastCheck = ''`;
+function updateLastCheck(siteID) {
+  return `UPDATE sites SET lastCheck = ${new Date().getTime()} WHERE siteID = ${siteID};`;
 }
 
 const exportObject = {

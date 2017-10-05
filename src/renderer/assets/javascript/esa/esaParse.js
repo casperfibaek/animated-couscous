@@ -34,8 +34,7 @@ export default function parse(obj) {
       });
 
       if (Object.keys(pImage).length !== Object.keys(defaultDatabase.images).length) {
-        console.error('Retrieved image had unexpected length'); // eslint-disable-line
-        console.log(pImage);
+        console.error('Retrieved image had unexpected length', pImage); // eslint-disable-line
       }
 
       return pImage;

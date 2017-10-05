@@ -2,7 +2,7 @@
 import sqlite from 'sqlite3'; // eslint-disable-line
 import path from 'path';
 import fs from 'fs';
-import { remote } from 'electron';
+import { remote } from 'electron'; // eslint-disable-line
 import qc from './queryConstructor';
 import defaultDatabase from './defaultDatabase';
 
@@ -84,13 +84,13 @@ function updateUser(userID, obj) {
   });
 }
 
-function updateLastCheck() {
+function updateLastCheck(siteID) {
   return new Promise((resolve, reject) => {
     const db = new sqlite.Database(dbPath, {
       mode: sqlite.OPEN_READWRITE,
     });
 
-    const query = qc.updateLastCheck();
+    const query = qc.updateLastCheck(siteID);
 
     db.run(query, (err) => {
       if (err) {
@@ -110,11 +110,15 @@ function insertInto(tableName, obj) {
 
     const query = qc.insertInto(tableName, obj);
 
-    db.get(query, (err) => {
+    db.run(query, (err) => {
       if (err) {
         db.close(reject(err));
       } else {
-        db.close(resolve('Completed insertInto'));
+        db.get('SELECT last_insert_rowid();', (getErr, data) => {
+          if (getErr) { db.close(reject(getErr)); } else {
+            db.close(resolve(data));
+          }
+        });
       }
     });
   });
