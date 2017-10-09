@@ -8,7 +8,9 @@ function createTable(tableName, obj) {
       columns += `${arr[0]} ${arr[1]}, `;
     });
 
-  return `CREATE TABLE ${tableName} (${columns.slice(0, -2)});`;
+  const query = `CREATE TABLE ${tableName} (${columns.slice(0, -2)});`;
+  console.log(query);
+  return query;
 }
 
 function insertInto(tableName, obj) {
@@ -17,14 +19,16 @@ function insertInto(tableName, obj) {
 
   Object.entries(obj).forEach((arr) => {
     columns += `"${arr[0]}", `;
-    if (Number.isInteger(arr[1]) || arr[1] === null) {
+    if (typeof arr[1] === 'number' || arr[1] === null) {
       values += `${arr[1]}, `;
     } else {
       values += `"${arr[1]}", `;
     }
   });
 
-  return `INSERT INTO ${tableName} (${columns.slice(0, -2)}) VALUES (${values.slice(0, -2)});`;
+  const query = `INSERT INTO ${tableName} (${columns.slice(0, -2)}) VALUES (${values.slice(0, -2)});`;
+  console.log(query);
+  return query;
 }
 
 function insertIntoArray(tableName, arr) {
@@ -51,8 +55,9 @@ function insertIntoArray(tableName, arr) {
     values += `(${_row.slice(0, -2)}), `;
   });
 
-  const final = `INSERT OR IGNORE INTO ${tableName} (${columns.slice(0, -2)}) VALUES ${values.slice(0, -2)};`;
-  return final;
+  const query = `INSERT OR IGNORE INTO ${tableName} (${columns.slice(0, -2)}) VALUES ${values.slice(0, -2)};`;
+  console.log(query);
+  return query;
 }
 
 function selectEntry(tableName, obj) {
@@ -61,14 +66,16 @@ function selectEntry(tableName, obj) {
   Object.entries(obj).forEach((arr) => {
     selection += `${arr[0]} = `;
 
-    if (Number.isInteger(arr[1]) || arr[1] === null) {
+    if (typeof arr[1] === 'number' || arr[1] === null) {
       selection += `${arr[1]} AND `;
     } else {
       selection += `"${arr[1]}" AND `;
     }
   });
 
-  return `SELECT * FROM ${tableName} WHERE (${selection.slice(0, -5)});`;
+  const query = `SELECT * FROM ${tableName} WHERE (${selection.slice(0, -5)});`;
+  console.log(query);
+  return query;
 }
 
 function selectMax(tableName, maxColumn) {
@@ -77,24 +84,28 @@ function selectMax(tableName, maxColumn) {
   return `SELECT * FROM ${tableName} WHERE ${maxColumn} = (${selection});`;
 }
 
-function updateUserValue(userID, obj) {
+function updateUser(obj) {
   let updates = '';
 
   Object.entries(obj).forEach((arr) => {
     updates += `${arr[0]} = `;
 
-    if (Number.isInteger(arr[1]) || arr[1] === null) {
+    if (typeof arr[1] === 'number' || arr[1] === null) {
       updates += `${arr[1]} AND `;
     } else {
       updates += `"${arr[1]}" AND `;
     }
   });
 
-  return `UPDATE users SET ${updates.slice(0, -5)} WHERE userID = "${userID}"`;
+  const query = `UPDATE users SET ${updates.slice(0, -5)} WHERE userID = "${obj.userID}"`;
+  console.log(query);
+  return query;
 }
 
 function updateLastCheck(siteID) {
-  return `UPDATE sites SET lastCheck = ${new Date().getTime()} WHERE siteID = ${siteID};`;
+  const query = `UPDATE sites SET lastCheck = ${new Date().getTime()} WHERE siteID = ${siteID};`;
+  console.log(query);
+  return query;
 }
 
 const exportObject = {
@@ -103,7 +114,7 @@ const exportObject = {
   insertIntoArray,
   selectEntry,
   selectMax,
-  updateUserValue,
+  updateUser,
   updateLastCheck,
 };
 

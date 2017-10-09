@@ -48,25 +48,18 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
       const vm = this;
       try {
         if (!vm.$store.getters.dbInitalized) {
-          db.initialize()
-            .then(async function() {
-              vm.$store.commit('setDbInitialized', true);
-              const user = await db.getLatestUser('users', 'lastLogin');
-              const username = vm.$refs.username.value;
-              if (username.length === 0) {
-                vm.$refs.username.value = user.username;
-              }
-            })
-        } else {
-          const user = await db.getLatestUser('users', 'lastLogin');
-          const username = vm.$refs.username.value;
-          if (username.length === 0) {
-            vm.$refs.username.value = user.username;
-          }
+          await db.initialize();
+          vm.$store.commit('setDbInitialized', true);
+        }
+        const user = await db.getLatestUser();
+        const username = vm.$refs.username.value;
+        if (username.length === 0) {
+          vm.$refs.username.value = user.username;
         }
       } catch (err) {
         this.$store.commit('errorStatusToggleOn');
         this.$store.commit('errorSetMessage', err.message);
+      } finally {
         this.$data.loading = false;
       }
     },
@@ -99,14 +92,18 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
           const vm = this;
 
           try{
-            let user = await db.getUser('users', { username, password });
-            if (user && user.userID) {
-              const updateUserLogin = await db.updateUser(user.userID, {
+            let user = await db.getUser({
+              username: username,
+              password: password,
+            });
+
+            if (user) {
+              await db.updateUser({
+                userID: user.userID,
                 lastLogin: Math.floor(new Date().getTime() / 1000),
               });
               vm.$store.commit('setCredentials', user);
               vm.$store.commit('setLoggedIn', true);
-              vm.$data.loading = false;
               vm.$router.push({ path: 'sites' });
             } else {
               user = await esaLogin(username, password);
@@ -115,15 +112,14 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
                 const createUser = await db.insertInto('users', user);
                 vm.$store.commit('setCredentials', user);
                 vm.$store.commit('setLoggedIn', true);
-                vm.$data.loading = false;
                 vm.$router.push({ path: 'sites' });
-              } else {
               }
             }
           } catch (err) {
             this.$store.commit('errorStatusToggleOn');
             this.$store.commit('errorSetMessage', err.message);
-            this.$data.loading = false;
+          } finally {
+            vm.$data.loading = false;
           }
         }
       },

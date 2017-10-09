@@ -71,14 +71,14 @@
 
   export default {
     name: 'sites-page',
-    created() {
+    created: async function created() {
       const vm = this;
       vm.$store.commit('clearSites');
-      const userID = this.$store.getters.credentials.userID;
-      db.getUserSites('sites', {userID: userID}).then((data) => {
-        data.forEach((site) => {
-          vm.$store.commit('addSite', site);
-        });
+      const credentials = this.$store.getters.credentials
+      const userID = credentials.userID;
+      const sites = await db.getUserSites({userID: userID});
+      sites.forEach((site) => {
+        vm.$store.commit('addSite', site);
       });
     },
     computed: {

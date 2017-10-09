@@ -45,9 +45,9 @@
 </template>
 
 <script>
-import baseForm from './createSentinel/baseForm';
-import advanced from './createSentinel/advancedS2';
-import postAndProcess from '../assets/javascript/postAndProcess';
+  import baseForm from './createSentinel/baseForm';
+  import advanced from './createSentinel/advancedS2';
+  import postAndProcess from '../assets/javascript/postAndProcess';
 
   export default {
     name: 'createSentinel2-page',
@@ -57,8 +57,8 @@ import postAndProcess from '../assets/javascript/postAndProcess';
       }
     },
     components: {
-      baseForm,
       advanced,
+      baseForm,
     },
     methods: {
       displayAdvanced: function() {

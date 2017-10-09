@@ -1,13 +1,13 @@
 /* eslint-disable no-shadow, no-console */
 const baseCredentials = {
-  username: '',
-  password: '',
-  email: '',
-  country: '',
-  domain: '',
-  firstname: '',
-  lastname: '',
-  lastLogin: '',
+  username: null,
+  password: null,
+  email: null,
+  country: null,
+  domain: null,
+  firstname: null,
+  lastname: null,
+  lastLogin: null,
   userID: null,
 };
 

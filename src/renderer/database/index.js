@@ -12,94 +12,38 @@ const appPath = remote.app.getPath('userData');
 const dbFolder = path.join(appPath, '/database');
 const dbPath = path.join(dbFolder, '/common.db');
 
-function getUser(tableName, obj) {
-  return new Promise((resolve, reject) => {
-    const db = new sqlite.Database(dbPath, {
-      mode: sqlite.OPEN_READONLY,
-    });
-
-    const query = qc.selectEntry(tableName, obj);
-
-    db.get(query, (err, data) => {
-      if (err) {
-        db.close(reject(err));
-      } else {
-        db.close(resolve(data));
-      }
-    });
-  });
-}
-
-function getLatestUser(tableName, max) {
-  return new Promise((resolve, reject) => {
-    const db = new sqlite.Database(dbPath, {
-      mode: sqlite.OPEN_READONLY,
-    });
-
-    const query = qc.selectMax(tableName, max);
-
-    db.get(query, (err, data) => {
-      if (err) {
-        db.close(reject(err));
-      } else {
-        db.close(resolve(data));
-      }
-    });
-  });
-}
-
-function getUserSites(tableName, obj) {
-  return new Promise((resolve, reject) => {
-    const db = new sqlite.Database(dbPath, {
-      mode: sqlite.OPEN_READONLY,
-    });
-
-    const query = qc.selectEntry(tableName, obj);
-
-    db.all(query, (err, data) => {
-      if (err) {
-        db.close(reject(err));
-      } else {
-        db.close(resolve(data));
-      }
-    });
-  });
-}
-
-function updateUser(userID, obj) {
+function base(type, query) {
   return new Promise((resolve, reject) => {
     const db = new sqlite.Database(dbPath, {
       mode: sqlite.OPEN_READWRITE,
     });
 
-    const query = qc.updateUserValue(userID, obj);
-
-    db.get(query, (err) => {
+    db[type](query, (err, data) => {
       if (err) {
         db.close(reject(err));
+      } else if (type === 'run') {
+        db.close(resolve());
       } else {
-        db.close(resolve('Completed updateUser'));
+        db.close(resolve(data));
       }
     });
   });
 }
 
+function getUser(obj) {
+  return base('get', qc.selectEntry('users', obj));
+}
+function getLatestUser() {
+  return base('get', qc.selectMax('users', 'lastLogin'));
+}
+function getUserSites(obj) {
+  return base('all', qc.selectEntry('sites', obj));
+}
+function updateUser(obj) {
+  return base('run', qc.updateUser(obj));
+}
 function updateLastCheck(siteID) {
-  return new Promise((resolve, reject) => {
-    const db = new sqlite.Database(dbPath, {
-      mode: sqlite.OPEN_READWRITE,
-    });
-
-    const query = qc.updateLastCheck(siteID);
-
-    db.run(query, (err) => {
-      if (err) {
-        db.close(reject(err));
-      } else {
-        db.close(resolve('Completed updateLastCheck'));
-      }
-    });
-  });
+  return base('run', qc.updateLastCheck(siteID));
 }
 
 function insertInto(tableName, obj) {
