@@ -35,7 +35,7 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
 
 <script>
   import esaLogin from '../assets/javascript/esa/esaLogin';
-  import db from '../database';
+  import DB from '../database';
 
   export default {
     name: 'login-page',
@@ -48,10 +48,12 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
       const vm = this;
       try {
         if (!vm.$store.getters.dbInitalized) {
-          await db.initialize();
+          await DB.initialize();
           vm.$store.commit('setDbInitialized', true);
         }
-        const user = await db.getLatestUser();
+        const user = await DB.Users.findOne({
+          order: [ [ 'createdAt', 'DESC' ]],
+        });
         const username = vm.$refs.username.value;
         if (username.length === 0) {
           vm.$refs.username.value = user.username;
@@ -92,25 +94,28 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
           const vm = this;
 
           try{
-            let user = await db.getUser({
-              username: username,
-              password: password,
+            let user = await DB.Users.findOne({
+              where: {
+                username: username,
+                password: password,
+              }
             });
 
             if (user) {
-              await db.updateUser({
-                userID: user.userID,
-                lastLogin: Math.floor(new Date().getTime() / 1000),
+              await DB.Users.update({
+                lastLogin: new Date()
+              }, {
+                where: { userID: user.userID }
               });
-              vm.$store.commit('setCredentials', user);
+              vm.$store.commit('setCredentials', user.dataValues);
               vm.$store.commit('setLoggedIn', true);
               vm.$router.push({ path: 'sites' });
             } else {
               user = await esaLogin(username, password);
               if (user) {
                 user.lastLogin = Math.floor(new Date().getTime() / 1000);
-                const createUser = await db.insertInto('users', user);
-                vm.$store.commit('setCredentials', user);
+                await DB.Users.create(user.dataValues);
+                vm.$store.commit('setCredentials', user.dataValues);
                 vm.$store.commit('setLoggedIn', true);
                 vm.$router.push({ path: 'sites' });
               }

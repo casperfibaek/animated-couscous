@@ -1,7 +1,6 @@
 import utils from './utils';
-import db from '../../database';
+import DB from '../../database';
 import esaSearch from './esa/esaSearch';
-import defaultDB from '../../database/defaultDatabase';
 
 export default async function postAndProcess(vm, credentials, satellite) {
   try {
@@ -13,8 +12,8 @@ export default async function postAndProcess(vm, credentials, satellite) {
 
     vm.$store.commit('setCurrentlyLoading', true);
     vm.$store.commit('setLoadingMessage', 'Inserting into database');
-    let siteID = await db.insertInto('sites', parsedForm);
-    siteID = Object.values(siteID)[0];
+
+    const site = await DB.Sites.create(parsedForm);
 
     vm.$store.commit('setLoadingMessage', 'Requesting ESA imagery');
     const esaReply = await esaSearch(Object.assign(parsedForm, {
@@ -23,14 +22,29 @@ export default async function postAndProcess(vm, credentials, satellite) {
     }));
 
     vm.$store.commit('setLoadingMessage', 'Inserting images into database');
-    await db.createImageSiteAndInsert(
-      `images_${parsedForm.userID}_${siteID}`, // tableName
-      defaultDB.images,
-      esaReply.images,
-    );
+
+    const images = await DB.Images.bulkCreate(esaReply.images, {
+      returning: true,
+    });
+
+    const insertedImages = [];
+    images.forEach(image => insertedImages.push(image.imageID));
+
+    const currentImages = await DB.Sites.findOne({
+      attributes: ['images'],
+    }, {
+      where: { siteID: site.siteID },
+    });
+
+    const insert = (currentImages.images) ? `${currentImages},${insertedImages.toString()}` : insertedImages.toString();
 
     vm.$store.commit('setLoadingMessage', 'Updating lastCheck');
-    await db.updateLastCheck(siteID);
+    await DB.Sites.update({
+      lastCheck: new Date(),
+      images: insert,
+    }, {
+      where: { siteID: site.siteID },
+    });
 
     vm.$router.push({ path: 'sites' });
   } catch (err) {

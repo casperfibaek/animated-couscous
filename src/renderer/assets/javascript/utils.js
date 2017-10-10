@@ -28,13 +28,19 @@ export default {
               }
               break;
             case 'date':
-              parsedForm[reference] = Date.parse(input.value);
+              parsedForm[reference] = new Date(input.value);
               break;
             case 'number':
               parsedForm[reference] = Number(input.value);
               break;
             default:
               parsedForm[reference] = input.value;
+          }
+        });
+
+        Object.entries(parsedForm).forEach((entry) => {
+          if (Array.isArray(entry[1])) {
+            parsedForm[entry[0]] = entry[1].toString();
           }
         });
 

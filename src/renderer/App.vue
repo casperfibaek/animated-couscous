@@ -7,7 +7,7 @@
 
 <script>
   import modals from './components/modals';
-  // import esa from './assets/javascript/esa/esa';
+  import DB from './database';
 
   export default {
     name: 'migrate-vue',

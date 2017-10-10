@@ -67,7 +67,7 @@
 </template>
 
 <script>
-  import db from '../database';
+  import DB from '../database';
 
   export default {
     name: 'sites-page',
@@ -76,7 +76,7 @@
       vm.$store.commit('clearSites');
       const credentials = this.$store.getters.credentials
       const userID = credentials.userID;
-      const sites = await db.getUserSites({userID: userID});
+      const sites = await DB.Sites.findAll({ where: { userID: userID }});
       sites.forEach((site) => {
         vm.$store.commit('addSite', site);
       });

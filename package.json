@@ -53,6 +53,7 @@
   "dependencies": {
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
+    "sequelize": "^4.13.8",
     "sort-object": "^3.0.2",
     "sqlite3": "^3.1.13",
     "vue": "^2.3.3",
