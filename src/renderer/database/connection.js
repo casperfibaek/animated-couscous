@@ -13,20 +13,29 @@ const sequelize = new Sequelize('common', 'sentinel-data-manager', 'password', {
   host: 'localhost',
   dialect: 'sqlite',
   pool: {
-    max: 5,
+    max: 10,
     min: 0,
-    idle: 10000,
+    idle: 25000,
   },
   storage: dbPath,
+  logging: false,
 });
 
 export default {
   Users: sequelize.define('user', defaultDatabase.users, {
     timestamps: true,
+    indexes: [{
+      unique: true,
+      fields: ['username', 'userID'],
+    }],
   }),
 
   Sites: sequelize.define('sites', defaultDatabase.sites, {
     timestamps: true,
+    indexes: [{
+      unique: true,
+      fields: ['userID', 'siteID'],
+    }],
   }),
 
   Images: sequelize.define('images', defaultDatabase.images, {

@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for='site in sites' class='siteTable-row'>
+        <tr v-for='site in sites' class='siteTable-row' v-bind:siteID="site.siteID" v-on:click="clickedRow">
           <td>
             <span>{{ site.sitename }}</span>
           </td>
@@ -73,20 +73,38 @@
     name: 'sites-page',
     created: async function created() {
       const vm = this;
-      vm.$store.commit('clearSites');
-      const credentials = this.$store.getters.credentials
-      const userID = credentials.userID;
-      const sites = await DB.Sites.findAll({ where: { userID: userID }});
-      sites.forEach((site) => {
-        vm.$store.commit('addSite', site);
-      });
+
+      try {
+        this.clearSites();
+        const credentials = this.getCredentials();
+        const sites = await DB.Sites.findAll({
+          where: { userID: credentials.userID },
+        });
+        sites.forEach(site => vm.addSite(site))
+      } catch (err) {
+        console.error(err);
+      }
     },
     computed: {
       sites: function() {
-        return this.$store.getters.sites;
+        return this.$store.getters.getSites;
       },
     },
     methods: {
+      clickedRow: function(event) {
+        let clicked;
+        const target = event.target;
+        if (target.hasAttributes('siteID')) {
+          clicked = target;
+        } else if (target.parentElement.hasAttributes('siteID')) {
+          clicked = target.parentElement;
+        } else {
+          clicked = target.parentElement.parentElement;
+        }
+        this.$router.push({
+          path: `/inspect/${clicked.getAttribute('siteID')}`,
+        });
+      },
       parseDate: function(int) {
         if (int === null || int === 'null') { return 'NA'}
         const parsed = new Date(int);
@@ -94,6 +112,12 @@
       },
       addSite: function(site) {
         this.$store.commit('addSite', site);
+      },
+      clearSites: function() {
+        this.$store.commit('clearSites');
+      },
+      getCredentials: function() {
+        return this.$store.getters.credentials;
       },
       sortTable: function sortTable(event) {
         const attributes = event.target.attributes;

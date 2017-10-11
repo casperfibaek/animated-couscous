@@ -1,13 +1,14 @@
 /* eslint-disable no-shadow */
-const utils = require('../../assets/javascript/utils');
+import sorts from '../../assets/javascript/sorts';
 
 const state = {
   sites: [],
 };
 
 const getters = {
-  sites: state => state.sites,
+  getSites: state => state.sites,
 };
+
 /* eslint-disable no-param-reassign */
 const mutations = {
   addSite: (state, site) => {
@@ -16,35 +17,20 @@ const mutations = {
   clearSites: (state) => {
     state.sites = [];
   },
-  dynamicSortAlphabetic: (state, options = {}) => {
-    state.sites.sort(utils.dynamicSortAlphabetic(
-      options.reference, options.direction));
+  dynamicSortAlphabetic: (state, options) => {
+    state.sites.sort(sorts.alphabetic(options.reference, options.direction));
   },
-  dynamicSortDates: (state, options = {}) => {
-    state.sites.sort(utils.dynamicSortDates(
-      options.reference, options.direction));
+  dynamicSortNumbers: (state, options) => {
+    state.sites.sort(sorts.numbers(options.reference, options.direction));
   },
-  dynamicSortNumbers: (state, options = {}) => {
-    state.sites.sort(utils.dynamicSortNumbers(
-      options.reference, options.direction));
-  },
-  dynamicSortArray: (state, options = {}) => {
-    state.sites.sort(utils.dynamicSortArray(
-      options.reference, options.direction));
+  dynamicSortArray: (state, options) => {
+    state.sites.sort(sorts.array(options.reference, options.direction));
   },
 };
 /* eslint-enable no-param-reassign */
-
-// const actions = {
-//   someAsyncTask({ commit }) {
-//     // do something async
-//     commit('INCREMENT_MAIN_COUNTER');
-//   },
-// };
 
 export default {
   state,
   getters,
   mutations,
-  // actions,
 };

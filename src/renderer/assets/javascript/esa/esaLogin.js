@@ -41,6 +41,8 @@ export default async function(username, password) {  // eslint-disable-line
     clearTimeout(esaResponseTimeout);
     if (err.statusCode && err.statusCode === 401) {
       throw Error('Incorrect username or password');
+    } else if (err.statusCode && err.statusCode === 503) {
+      throw Error('SciHub unavailable');
     } else {
       throw err;
     }

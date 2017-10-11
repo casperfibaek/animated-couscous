@@ -4,12 +4,12 @@ import defaultDatabase from './defaultDatabase';
 export default async function initialize() {
   try {
     await connection.sequelize.authenticate();
-    await connection.sequelize.sync({ force: true });
+    await connection.sequelize.sync({ force: false });
 
     await Promise.all([
       connection.Users.create(defaultDatabase.defaultUser),
-      connection.Sites.create(defaultDatabase.defaultSiteS1),
-      connection.Sites.create(defaultDatabase.defaultSiteS2),
+      // connection.Sites.create(defaultDatabase.defaultSiteS1),
+      // connection.Sites.create(defaultDatabase.defaultSiteS2),
     ]);
 
     return 'completed';

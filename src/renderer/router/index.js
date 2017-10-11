@@ -27,6 +27,11 @@ export default new Router({
       component: require('@/components/createSentinel2').default,
     },
     {
+      path: '/inspect/:siteID',
+      name: 'siteInspection-page',
+      component: require('@/components/inspection').default,
+    },
+    {
       path: '*',
       redirect: '/',
     },

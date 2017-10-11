@@ -145,11 +145,30 @@ a{
   max-width: 300px;
 }
 
+.imageTable{
+  /*overflow-x: scroll;*/
+}
+
+.imageTable-holder{
+  max-width: 800px;
+  max-height: 600px;
+  overflow: auto;
+}
+
+.imageTable-head{
+  font-size: small;
+}
+
+.imageTable-row{
+  font-size: smaller;
+}
+
 .sites > span,
 .table-head > span{
   pointer-events: none;
   user-select: none;
 }
+
 .siteTable-row > td > span{
   user-select: none;
   cursor: pointer;

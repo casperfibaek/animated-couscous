@@ -14,14 +14,12 @@ export default {
     email: { type: Sequelize.STRING },
     firstname: { type: Sequelize.STRING },
     lastname: { type: Sequelize.STRING },
-    username: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      unique: true,
-    },
+    username: { type: Sequelize.STRING, allowNull: false },
     password: { type: Sequelize.STRING, allowNull: false },
     lastLogin: { type: Sequelize.DATE },
   },
+
+
   defaultUser: {
     username: 'test',
     password: 'test',
@@ -57,6 +55,8 @@ export default {
     cloudcoverpercentage: { type: Sequelize.FLOAT },
     orbitdirection: { type: Sequelize.STRING },
   },
+
+
   defaultSiteS1: {
     userID: 1,
     sitename: 'Kristianssaede',
@@ -65,7 +65,7 @@ export default {
     downloadtype: 'metadata',
     startDate: new Date(Date.parse('2017-09-02')),
     lastCheck: new Date(Date.parse('2017-09-12')),
-    footprint: `{'type':'Feature','properties':{},'geometry':{'type':'Polygon','coordinates':[[[11.36037826538086,54.82284347568134],[11.285018920898438,54.785938704274166],[11.358146667480469,54.7427579544346],[11.430587768554688,54.77277147807947],[11.406383514404297,54.812359220481845],[11.36037826538086,54.82284347568134]]]}}`,
+    footprint: `{'type':'Feature','properties':{},'geometry':{'type':'Polygon','coordinates':[[[11.360378,54.822843],[11.285018,54.785938],[11.358146,54.742757],[11.430587,54.772771],[11.406383,54.812359],[11.360378,54.822843]]]}}`,
     satellite: 'Sentinel-1',
     producttype: 'SLC,GRD,OCN,RAW',
     polarisationmode: 'HH,VV,HV,VH,HH+HV,VV+VH',
@@ -80,7 +80,7 @@ export default {
     downloadtype: 'metadata',
     startDate: Date.parse('2017-07-14'),
     lastCheck: Date.parse('2017-09-13'),
-    footprint: `{type:Feature,properties:{},geometry:{type:Polygon,coordinates:[[[11.87295913696289,55.58795011451677],[11.830558776855469,55.555048994867036],[11.891841888427733,55.52882484083191],[11.934242248535156,55.56990158550945],[11.87295913696289,55.58795011451677]]]}}`,
+    footprint: `{'type':'Feature','properties':{},'geometry':{'type':'Polygon','coordinates':[[[11.872959,55.587950],[11.830558,55.555048],[11.891841,55.528824],[11.934242,55.569901],[11.872959,55.587950]]]}}`,
     satellite: 'Sentinel-2',
     producttype: 'S2MSI1C,S2MSI2Ap',
     cloudcoverpercentage: 25,
