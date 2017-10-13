@@ -29,27 +29,13 @@
       </thead>
       <tbody>
         <tr v-for='site in sites' class='siteTable-row' v-bind:siteID="site.siteID" v-on:click="clickedRow">
-          <td>
-            <span>{{ site.sitename }}</span>
-          </td>
-          <td>
-            <span>{{ site.satellite }}</span>
-          </td>
-          <td>
-            <span class="float-right">{{ site.frequency }}</span>
-          </td>
-          <td>
-            <span>{{ site.downloadtype }}</span>
-          </td>
-          <td>
-            <span>{{ parseDate(site.startDate) }}</span>
-          </td>
-          <td>
-            <span>{{ parseDate(site.lastCheck) }}</span>
-          </td>
-          <td>
-            <span>{{ site.producttype }}</span>
-          </td>
+          <td><span>{{ site.sitename }}</span></td>
+          <td><span>{{ site.satellite }}</span></td>
+          <td><span>{{ site.frequency }}</span></td>
+          <td><span>{{ site.downloadtype }}</span></td>
+          <td><span>{{ parseDate(site.startDate) }}</span></td>
+          <td><span>{{ parseDate(site.lastCheck) }}</span></td>
+          <td><span>{{ site.producttype }}</span></td>
         </tr>
       </tbody>
     </table>
@@ -68,22 +54,19 @@
 
 <script>
   import DB from '../database';
+  import parseDates from '../assets/javascript/parseDate';
 
   export default {
     name: 'sites-page',
     created: async function created() {
       const vm = this;
 
-      try {
-        this.clearSites();
-        const credentials = this.getCredentials();
-        const sites = await DB.Sites.findAll({
-          where: { userID: credentials.userID },
-        });
-        sites.forEach(site => vm.addSite(site))
-      } catch (err) {
-        console.error(err);
-      }
+      this.$store.commit('clearSites');
+      const credentials = this.getCredentials();
+      const sites = await DB.Sites.findAll({
+        where: { userID: credentials.userID },
+      });
+      sites.forEach(site => vm.addSite(site))
     },
     computed: {
       sites: function() {
@@ -95,26 +78,32 @@
         let clicked;
         const target = event.target;
         if (target.hasAttributes('siteID')) {
-          clicked = target;
+          clicked = target.getAttribute('siteID');
         } else if (target.parentElement.hasAttributes('siteID')) {
-          clicked = target.parentElement;
+          clicked = target.parentElement.getAttribute('siteID');
         } else {
-          clicked = target.parentElement.parentElement;
+          clicked = target.parentElement.parentElement.getAttribute('siteID');
         }
-        this.$router.push({
-          path: `/inspect/${clicked.getAttribute('siteID')}`,
-        });
+        clicked = Number(clicked);
+
+        let clickedSite;
+        for (let site of this.sites) {
+          if (site.siteID === clicked) { clickedSite = site; break; }
+        }
+
+        this.addClickedSite(clickedSite.dataValues);
+
+        this.$router.push({ path: 'inspectSite' });
       },
-      parseDate: function(int) {
-        if (int === null || int === 'null') { return 'NA'}
-        const parsed = new Date(int);
-        return `${parsed.getDay()+1}/${parsed.getMonth()+1}-${parsed.getFullYear()}`;
+      parseDate: function(date) {
+        if (date === null || date === 'null') { return 'NA'}
+        return parseDates(date);
       },
       addSite: function(site) {
         this.$store.commit('addSite', site);
       },
-      clearSites: function() {
-        this.$store.commit('clearSites');
+      addClickedSite: function(site) {
+        this.$store.commit('addClickedSite', site);
       },
       getCredentials: function() {
         return this.$store.getters.credentials;
@@ -137,6 +126,7 @@
         }
 
         this.$store.commit(sortFunction, {
+          array: 'images',
           reference: reference,
           direction: direction,
         });

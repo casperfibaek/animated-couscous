@@ -29,10 +29,9 @@
 </template>
 
 <script>
-  import '../../assets/javascript/leaflet';
-  import '../../assets/javascript/leaflet.pm.min.js';
   /* globals L */
-  const Leaflet = L;
+  let Leaflet;
+  if (L) {Leaflet = L} else { console.error('Leaflet not loaded.'); }
 
   export default {
     name: 'createGeometry-modal',

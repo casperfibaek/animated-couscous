@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import utils from './utils';
 import DB from '../../database';
 import esaSearch from './esa/esaSearch';
@@ -20,7 +22,7 @@ export default async function postAndProcess(vm, credentials, satellite) {
     }));
 
     vm.$store.commit('setLoadingMessage', 'Inserting images into database');
-    if (esaReply.images.length > 0) {
+    if (esaReply.images) {
       const newImages = await DB.Images.bulkCreate(esaReply.images, {
         returning: true,
       });

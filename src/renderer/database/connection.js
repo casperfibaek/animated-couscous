@@ -1,15 +1,17 @@
 import sqlite from 'sqlite3'; // eslint-disable-line
 import Sequelize from 'sequelize';
 import path from 'path';
+import fs from 'fs';
 import { remote } from 'electron'; // eslint-disable-line
 
 import defaultDatabase from './defaultDatabase';
 
 const appPath = remote.app.getPath('userData');
-const dbFolder = path.join(appPath, '/database');
-const dbPath = path.join(dbFolder, '/common.db');
+const dbFolder = path.join(appPath, '/databases');
+if (!fs.existsSync(dbFolder)) { fs.mkdirSync(dbFolder); }
+const dbPath = path.join(dbFolder, '/SDM.db');
 
-const sequelize = new Sequelize('common', 'sentinel-data-manager', 'password', {
+const sequelize = new Sequelize('SDM', 'sentinel-data-manager', 'password', {
   host: 'localhost',
   dialect: 'sqlite',
   pool: {

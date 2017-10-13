@@ -86,7 +86,7 @@ export default {
     const split = str.split('((')[1].split('))')[0].split(',');
 
     for (let i = 0; i < split.length; i += 1) {
-      split[i] = split[i].split(' ').reverse();
+      split[i] = split[i].split(' ');
       split[i][0] = Number(split[i][0]);
       split[i][1] = Number(split[i][1]);
     }

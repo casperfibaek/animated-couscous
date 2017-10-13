@@ -14,7 +14,7 @@ export default function parse(obj) {
         title: image.title,
         linkPrimary: image.link['0'].href,
         linkAlternative: image.link['1'].href,
-        linkQuicklook: image.link['1'].href,
+        linkQuicklook: image.link['2'].href,
       };
 
       utils.mergeESA(image.date, pImage, 'date');

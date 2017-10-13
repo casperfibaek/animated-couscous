@@ -161,6 +161,7 @@ a{
 
 .imageTable-row{
   font-size: smaller;
+  cursor: pointer;
 }
 
 .sites > span,
@@ -188,7 +189,7 @@ a{
 }
 
 textarea {
-    resize: none;
+  resize: none;
 }
 
 #map{

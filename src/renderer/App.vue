@@ -6,6 +6,8 @@
 </template>
 
 <script>
+  import './assets/javascript/leaflet';
+  import './assets/javascript/leaflet.pm.min.js';
   import modals from './components/modals';
   import DB from './database';
 
