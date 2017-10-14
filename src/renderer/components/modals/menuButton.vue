@@ -1,5 +1,5 @@
 <template>
-  <button v-on:click="toggleMenu" type='button' class='btn btn-secondary userMenuButton'>
+  <button v-on:click="setModal({ modal: 'menu', status: true });" type='button' class='btn btn-secondary userMenuButton'>
     <i class="icon icon-menu"></i>
       <span> Menu</span>
   </button>
@@ -7,13 +7,11 @@
 
 <script>
 export default {
-  name: 'userMenuButton',
+  name: 'menuButton-modal',
   methods: {
-    toggleMenu: function () {
-      this.$store.commit('toggleModal', 'modalsMenu');
-    },
+    setModal(options) { this.$store.commit('setModal', options); },
   },
-}
+};
 </script>
 
 <style>

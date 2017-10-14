@@ -42,10 +42,10 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button v-on:click="toggleSettings" class="btn btn-primary float-left" name="close">
+        <button v-on:click="setModal({ modal: 'settings', status: false });" class="btn btn-primary float-left" name="close">
           <span>Close</span>
         </button>
-        <button v-on:click="toggleSettings" type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom" data-tooltip="Apply your changes.">
+        <button v-on:click="setModal({ modal: 'settings', status: false });" type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom" data-tooltip="Apply your changes.">
           <span>Apply</span>
         </button>
       </div>
@@ -57,11 +57,9 @@
   export default {
     name: 'settings-modal',
     methods: {
-      toggleSettings: function () {
-        this.$store.commit('toggleModal', 'modalsSettings');
-      },
+      setModal(options) { this.$store.commit('setModal', options); },
     },
-  }
+  };
 </script>
 
 <style>

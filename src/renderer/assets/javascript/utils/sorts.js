@@ -5,7 +5,7 @@ function result(A, B) {
 
 export default {
   // Based on: Ege Özcan @ StackOverflow
-  alphabetic(property, order = 1) {
+  string(property, order = 1) {
     return function sort(a, b) {
       const A = a[property].toLowerCase();
       const B = b[property].toLowerCase();
@@ -28,4 +28,5 @@ export default {
       return result(A, B) * order;
     };
   },
+
 };

@@ -8,33 +8,33 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'LoginPage',
-      component: require('@/components/loginPage').default,
+      name: 'login',
+      component: require('@/components/login').default,
     },
     {
-      path: '/sites',
-      name: 'SitesPage',
-      component: require('@/components/sitesPage').default,
+      path: '/allSites',
+      name: 'allSites',
+      component: require('@/components/allSites').default,
     },
     {
       path: '/createSentinel1',
-      name: 'createSentinel1-page',
+      name: 'createSentinel1',
       component: require('@/components/createSentinel1').default,
     },
     {
       path: '/createSentinel2',
-      name: 'createSentinel2-page',
+      name: 'createSentinel2',
       component: require('@/components/createSentinel2').default,
     },
     {
-      path: '/inspectSite',
-      name: 'siteInspection-page',
-      component: require('@/components/siteInspection').default,
+      path: '/singleSite',
+      name: 'singleSite',
+      component: require('@/components/singleSite').default,
     },
     {
-      path: '/inspectImage',
-      name: 'imageInspection-page',
-      component: require('@/components/imageInspection').default,
+      path: '/singleImage',
+      name: 'singleImage',
+      component: require('@/components/singleImage').default,
     },
     {
       path: '*',

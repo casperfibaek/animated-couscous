@@ -6,24 +6,16 @@
 </template>
 
 <script>
+  /* eslint-env browser */
   import './assets/javascript/leaflet';
-  import './assets/javascript/leaflet.pm.min.js';
-  import modals from './components/modals';
-  import DB from './database';
+  import './assets/javascript/leaflet.pm.min';
+  import './assets/javascript/leaflet.imageOverlay.rotated';
+  import modals from './components/modals.vue';
 
   export default {
     name: 'migrate-vue',
     components: {
       modals,
-    },
-    created() {
-      const vm = this;
-      window.addEventListener('mouseup', (e) => {
-        vm.$store.commit('classEventListener', {
-          class: e.target.getAttribute('class'),
-          id: e.target.getAttribute('id'),
-        });
-      });
     },
   };
 </script>

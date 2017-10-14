@@ -3,17 +3,17 @@
     <ul class="menu">
       <a>
         <i class="icon icon-people"></i>
-        <span>{{ FirstName }} {{ LastName }}</span>
+        <span>{{ credentials.firstname }} {{ credentials.lastname }}</span>
       </a>
       <li class="divider"></li>
-      <li class="menu-item" v-on:click="toggle('modalsSettings')">
+      <li class="menu-item" v-on:click="setModal({ modal: 'settings', status: true });">
         <a>
           <i class="icon icon-more-horiz"></i>
           <span> Settings</span>
         </a>
       </li>
       <li class="menu-item">
-        <a href="#/loginPage" v-on:click="logout('modalsMenu')">
+        <a href="#/loginPage" v-on:click="logout()">
           <i class="icon icon-arrow-left"></i>
           <span> Logout</span>
         </a>
@@ -30,39 +30,27 @@
 </template>
 
 <script>
-  import electron from 'electron';
-  import { remote } from 'electron';
+  import electron from 'electron'; // eslint-disable-line
+  import { remote } from 'electron';  // eslint-disable-line
 
   export default {
     name: 'userMenu-modal',
     computed: {
-      Username: function() {
-        return this.$store.getters.credentials.username;
-      },
-      FirstName: function() {
-        return this.$store.getters.credentials.firstname;
-      },
-      LastName: function() {
-        return this.$store.getters.credentials.lastname;
-      },
+      credentials() { return this.$store.getters.getCredentials; },
     },
     methods: {
-      closeProgramme: function() {
-        remote.getCurrentWindow().close();
-      },
-      logout: function (modal) {
-        this.$store.commit('toggleModal', modal);
-        this.$store.commit('setLoggedIn', false);
-        this.$store.commit('clearCredentials');
-      },
-      toggle: function (modal) {
-        this.$store.commit('toggleModal', modal);
+      setModal(options) { this.$store.commit('setModal', options); },
+      setLoginStatus(bool) { this.$store.commit('setLoginStatus', bool); },
+      clearCredentials() { this.$store.commit('clearCredentials'); },
+
+      closeProgramme() { remote.getCurrentWindow().close(); },
+      logout() {
+        this.setModal({ modal: 'menu', status: false });
+        this.setLoginStatus(false);
+        this.clearCredentials();
       },
     },
-    components: {
-      //
-    }
-  }
+  };
 </script>
 
 <style>

@@ -1,6 +1,6 @@
 <template>
   <div class="toast toast-warning">
-    <button v-on:click="clearToast" class="btn btn-clear float-right"></button>
+    <button v-on:click="setErrorStatus(false);" class="btn btn-clear float-right"></button>
     <span>{{ errorMessage }}</span>
   </div>
 </template>
@@ -9,19 +9,15 @@
   export default {
     name: 'errorToast-modal',
     mounted() {
-      setTimeout(() => {
-        this.$store.commit('errorStatusToggleOff');
-      }, 10 * 1000);
+      setTimeout(() => { this.setErrorStatus(false); }, 10 * 1000);
     },
     computed: {
-      errorMessage: function() { return this.$store.getters.errorMessage; },
+      errorMessage() { return this.$store.getters.getErrorMessage; },
     },
     methods: {
-      clearToast: function() {
-        this.$store.commit('errorStatusToggleOff');
-      },
+      setErrorStatus(bool) { this.$store.commit('setErrorStatus', bool); },
     },
-  }
+  };
 </script>
 
 <style>

@@ -149,5 +149,5 @@
 <script>
   export default {
     name: 'createSentinel1-advanced',
-  }
+  };
 </script>

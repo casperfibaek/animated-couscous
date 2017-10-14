@@ -9,12 +9,3 @@ export default {
   Sites: connection.Sites,
   Images: connection.Images,
 };
-
-// initialize,
-// getUser,
-// getUserSites,
-// getLatestUser,
-// updateUser,
-// updateLastCheck,
-// insertInto,
-// createImageSiteAndInsert,

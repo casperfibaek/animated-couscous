@@ -1,18 +1,17 @@
-/* eslint-disable no-console */
-
-import utils from './utils';
-import DB from '../../database';
-import esaSearch from './esa/esaSearch';
+import formUtils from './formUtils';
+import DB from '../database';
+import esaSearch from '../esa/esaSearch';
 
 export default async function postAndProcess(vm, credentials, satellite) {
   try {
-    vm.$store.commit('setCurrentlyLoading', true);
+    vm.$store.commit('setLoadingStatus', true);
     vm.$store.commit('setLoadingMessage', 'Parsing form');
 
-    const parsedForm = await utils.parseForm('createSite');
+    const parsedForm = await formUtils.parseForm('createSite');
 
     parsedForm.satellite = satellite;
-    parsedForm.footprint = vm.$store.getters.geometryPrepared;
+    parsedForm.footprint = JSON.stringify(vm.$store.getters.getGeometry)
+      .replace(/"/g, "'");
     parsedForm.userID = credentials.userID;
 
     vm.$store.commit('setLoadingMessage', 'Requesting ESA imagery');
@@ -23,9 +22,7 @@ export default async function postAndProcess(vm, credentials, satellite) {
 
     vm.$store.commit('setLoadingMessage', 'Inserting images into database');
     if (esaReply.images) {
-      const newImages = await DB.Images.bulkCreate(esaReply.images, {
-        returning: true,
-      });
+      const newImages = await DB.Images.bulkCreate(esaReply.images, { returning: true });
       const insertedImages = newImages.map(image => image.imageID);
       parsedForm.images = insertedImages.toString();
     } else {
@@ -37,12 +34,13 @@ export default async function postAndProcess(vm, credentials, satellite) {
     vm.$store.commit('setLoadingMessage', 'Creating site');
     await DB.Sites.create(parsedForm);
 
-    vm.$router.push({ path: 'sites' });
+    vm.$router.push({ path: 'allSites' });
   } catch (err) {
     console.error(err); // eslint-disable-line
   } finally {
-    vm.$store.commit('setGeometryAdded', false);
-    vm.$store.commit('setGeometry', null);
-    vm.$store.commit('setCurrentlyLoading', false); vm.$store.commit('setLoadingMessage', '');
+    vm.$store.commit('setGeometryStatus', false);
+    vm.$store.commit('clearGeometry');
+    vm.$store.commit('setLoadingStatus', false);
+    vm.$store.commit('setLoadingMessage', '');
   }
 }

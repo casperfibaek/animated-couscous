@@ -19,13 +19,11 @@
 
 <script>
   export default {
-    name: 'createGeometry-modal',
+    name: 'loading-modal',
     computed: {
-      loadingMessage: function() {
-        return this.$store.getters.loadingMessage;
-      },
+      loadingMessage() { return this.$store.getters.getLoadingMessage; },
     },
-  }
+  };
 </script>
 
 <style>

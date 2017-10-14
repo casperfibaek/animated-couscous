@@ -65,7 +65,7 @@
         </tbody>
       </table>
     </div>
-    <router-link :to="{ path: '/sites' }">
+    <router-link :to="{ path: '/allSites' }">
       <button type='button' name='submit' class='btn btn-primary margin-top float-left'>
         <span>Back</span>
       </button>
@@ -74,63 +74,43 @@
 </template>
 
 <script>
-  import DB from '../database';
-  import parseDate from '../assets/javascript/parseDate';
+  import DB from '../assets/javascript/database';
+  import parseDate from '../assets/javascript/utils/parseDate';
+  import getClickedID from '../assets/javascript/utils/getClickedID';
+  import findInArray from '../assets/javascript/utils/findInArray';
 
   export default {
-    name: 'inspectSite-page',
+    name: 'singleSite',
     created: async function created() {
       const vm = this;
 
-      vm.$data.site = vm.$store.getters.getClickedSite;
-      const imageIDs = vm.$data.site.images.split(',');
+      const imageIDs = this.clickedSite.images.split(',');
       imageIDs.forEach((imageID) => {
-        DB.Images.findById(imageID).then(image => {
-          vm.addImage(image.dataValues);
-        });
+        DB.Images.findById(imageID)
+          .then((image) => { vm.addImage(image.dataValues); });
       });
-
     },
-    data: function () {
+    data() {
       return {
         site: { sitename: '' },
       };
     },
     computed: {
-      images: function() {
-        return this.$store.getters.getImages;
-      },
+      images() { return this.$store.getters.getImages; },
+      clickedSite() { return this.$store.getters.getClickedSite; },
     },
     methods: {
-      parseDates: function(date) {
-        return parseDate(date);
-      },
-      addImage: function(image) {
-        this.$store.commit('addImage', image);
-      },
-      addClickedImage: function(image) {
-        this.$store.commit('addClickedImage', image);
-      },
-      clickedRow: function(event) {
-        const target = event.target;
+      addImage(image) { this.$store.commit('addImage', image); },
+      setClickedImage(image) { this.$store.commit('setClickedImage', image); },
+      dynamicSort(options) { this.$store.commit('dynamicSort', options); },
 
-        let clicked;
-        if (target.hasAttributes('imageID')) {
-          clicked = target.getAttribute('imageID');
-        } else if (target.parentElement.hasAttributes('imageID')) {
-          clicked = target.parentElement.getAttribute('imageID');
-        } else {
-          clicked = target.parentElement.parentElement.getAttribute('imageID');
-        }
-        clicked = Number(clicked);
+      parseDates(date) { return parseDate(date); },
+      clickedRow(event) {
+        const imageID = getClickedID(event, 'imageID');
+        const clicked = findInArray(this.images, { imageID });
 
-        let clickedImage;
-        for (let image of this.images) {
-          if (image.imageID === clicked) { clickedImage = image; break; }
-        }
-
-        this.addClickedImage(clickedImage);
-        this.$router.push({ path: 'inspectImage' });
+        this.setClickedImage(clicked);
+        this.$router.push({ path: 'singleImage' });
       },
       sortTable: function sortTable(event) {
         const attributes = event.target.attributes;
@@ -139,20 +119,19 @@
         const sorted = attributes.sorted.value;
         const direction = (sorted === 'down') ? 1 : -1;
 
-        let sortFunction = 'dynamicSortAlphabetic';
-        if (sortType === 'number') { sortFunction = 'dynamicSortNumbers'; }
-        if (sortType === 'array') { sortFunction = 'dynamicSortArray'; }
-
+        /* eslint-disable no-param-reassign */
         if (direction === 1) {
           event.target.attributes.sorted.nodeValue = 'up';
         } else {
           event.target.attributes.sorted.nodeValue = 'down';
         }
+        /* eslint-enable no-param-reassign */
 
-        this.$store.commit(sortFunction, {
+        this.dynamicSort({
+          type: sortType,
           array: 'images',
-          reference: reference,
-          direction: direction,
+          reference,
+          direction,
         });
       },
     },

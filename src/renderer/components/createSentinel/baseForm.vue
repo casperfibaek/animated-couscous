@@ -63,11 +63,9 @@
         <label class="form-label"><span>Geometry</span></label>
       </div>
       <div class="col-9">
-        <button v-on:click="toggleCreateGeometry" type="button" class="form-input btn btn-secondary" v-bind:class="{
-          'is-success': geometryAdded
-        }">
-          <span v-if="!geometryAdded">Create Geometry</span>
-          <span v-if="geometryAdded">Geometry Attached</span>
+        <button v-on:click="setModal({ modal: 'createGeometry', status: true }); setGeometryStatus(false); clearGeometry()" type="button" class="form-input btn btn-secondary" v-bind:class="{ 'is-success': geometryStatus }">
+          <span v-if="!geometryStatus">Create Geometry</span>
+          <span v-if="geometryStatus">Geometry Attached</span>
         </button>
       </div>
     </div>
@@ -77,23 +75,19 @@
 
 <script>
   export default {
-    name: 'createSentinel1-baseForm',
+    name: 'createSentinel-baseForm',
     mounted() {
       this.$refs.sitename.focus();
     },
     computed: {
-      geometryAdded: function() {
-        return this.$store.getters.geometryAdded;
-      },
+      geometryStatus() { return this.$store.getters.getGeometryStatus; },
     },
     methods: {
-      toggleCreateGeometry: function (modal) {
-        this.$store.commit('toggleModal', 'modalsCreateGeometry');
-        this.$store.commit('setGeometryAdded', false);
-        this.$store.commit('setGeometry', null);
-      },
-    }
-  }
+      setModal(options) { return this.$store.commit('setModal', options); },
+      setGeometryStatus(bool) { return this.$store.commit('setGeometryStatus', bool); },
+      clearGeometry() { return this.$store.commit('clearGeometry'); },
+    },
+  };
 </script>
 
 <style>

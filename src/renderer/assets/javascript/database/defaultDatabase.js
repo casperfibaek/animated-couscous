@@ -19,7 +19,6 @@ export default {
     lastLogin: { type: Sequelize.DATE },
   },
 
-
   defaultUser: {
     username: 'test',
     password: 'test',
@@ -30,7 +29,6 @@ export default {
     lastname: 'McDermott',
     lastLogin: new Date(),
   },
-
 
   sites: {
     siteID: {
@@ -55,37 +53,6 @@ export default {
     cloudcoverpercentage: { type: Sequelize.FLOAT },
     orbitdirection: { type: Sequelize.STRING },
   },
-
-
-  defaultSiteS1: {
-    userID: 1,
-    sitename: 'Kristianssaede',
-    notes: 'Stor skov paa Lolland',
-    frequency: 24,
-    downloadtype: 'metadata',
-    startDate: new Date(Date.parse('2017-09-02')),
-    lastCheck: new Date(Date.parse('2017-09-12')),
-    footprint: `{'type':'Feature','properties':{},'geometry':{'type':'Polygon','coordinates':[[[11.360378,54.822843],[11.285018,54.785938],[11.358146,54.742757],[11.430587,54.772771],[11.406383,54.812359],[11.360378,54.822843]]]}}`,
-    satellite: 'Sentinel-1',
-    producttype: 'SLC,GRD,OCN,RAW',
-    polarisationmode: 'HH,VV,HV,VH,HH+HV,VV+VH',
-    sensoroperationalmode: 'SM,IW,EW',
-    orbitdirection: 'Ascending,Descending',
-  },
-  defaultSiteS2: {
-    userID: 1,
-    sitename: 'Bidstrup Skovene',
-    notes: 'Skov paa Sjaelland',
-    frequency: 24,
-    downloadtype: 'metadata',
-    startDate: Date.parse('2017-07-14'),
-    lastCheck: Date.parse('2017-09-13'),
-    footprint: `{'type':'Feature','properties':{},'geometry':{'type':'Polygon','coordinates':[[[11.872959,55.587950],[11.830558,55.555048],[11.891841,55.528824],[11.934242,55.569901],[11.872959,55.587950]]]}}`,
-    satellite: 'Sentinel-2',
-    producttype: 'S2MSI1C,S2MSI2Ap',
-    cloudcoverpercentage: 25,
-  },
-
 
   images: {
     imageID: {

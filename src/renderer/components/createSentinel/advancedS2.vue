@@ -30,6 +30,6 @@
 
 <script>
   export default {
-    name: 'createSentinel1-advanced',
-  }
+    name: 'createSentinel2-advanced',
+  };
 </script>

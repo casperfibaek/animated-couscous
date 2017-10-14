@@ -1,5 +1,5 @@
 import utils from './esaUtils';
-import defaultDatabase from '../../../database/defaultDatabase';
+import defaultDatabase from '../database/defaultDatabase';
 
 export default function parse(obj) {
   if (!obj.feed) { return Error('Unable to parse'); }

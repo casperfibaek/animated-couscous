@@ -53,60 +53,37 @@
 </template>
 
 <script>
-  import DB from '../database';
-  import parseDates from '../assets/javascript/parseDate';
+  import DB from '../assets/javascript/database';
+  import parseDates from '../assets/javascript/utils/parseDate';
+  import getClickedID from '../assets/javascript/utils/getClickedID';
+  import findInArray from '../assets/javascript/utils/findInArray';
 
   export default {
-    name: 'sites-page',
-    created: async function created() {
-      const vm = this;
-
-      this.$store.commit('clearSites');
-      const credentials = this.getCredentials();
-      const sites = await DB.Sites.findAll({
-        where: { userID: credentials.userID },
-      });
-      sites.forEach(site => vm.addSite(site))
+    name: 'allSites',
+    async created() {
+      this.clearSites();
+      const sites = await DB.Sites.findAll({ where: { userID: this.credentials.userID } });
+      sites.forEach(site => this.addSite(site), this);
     },
     computed: {
-      sites: function() {
-        return this.$store.getters.getSites;
-      },
+      sites() { return this.$store.getters.getSites; },
+      credentials() { return this.$store.getters.getCredentials; },
     },
     methods: {
-      clickedRow: function(event) {
-        let clicked;
-        const target = event.target;
-        if (target.hasAttributes('siteID')) {
-          clicked = target.getAttribute('siteID');
-        } else if (target.parentElement.hasAttributes('siteID')) {
-          clicked = target.parentElement.getAttribute('siteID');
-        } else {
-          clicked = target.parentElement.parentElement.getAttribute('siteID');
-        }
-        clicked = Number(clicked);
+      addSite(site) { this.$store.commit('addSite', site); },
+      setClickedSite(site) { this.$store.commit('setClickedSite', site); },
+      clearSites() { this.$store.commit('clearSites'); },
+      dynamicSort(options) { this.$store.commit('dynamicSort', options); },
 
-        let clickedSite;
-        for (let site of this.sites) {
-          if (site.siteID === clicked) { clickedSite = site; break; }
-        }
-
-        this.addClickedSite(clickedSite.dataValues);
-
-        this.$router.push({ path: 'inspectSite' });
+      clickedRow(event) {
+        const siteID = getClickedID(event, 'siteID');
+        const clicked = findInArray(this.sites, { siteID });
+        this.setClickedSite(clicked.dataValues);
+        this.$router.push({ path: 'singleSite' });
       },
-      parseDate: function(date) {
-        if (date === null || date === 'null') { return 'NA'}
+      parseDate(date) {
+        if (date === null || date === 'null') { return 'NA'; }
         return parseDates(date);
-      },
-      addSite: function(site) {
-        this.$store.commit('addSite', site);
-      },
-      addClickedSite: function(site) {
-        this.$store.commit('addClickedSite', site);
-      },
-      getCredentials: function() {
-        return this.$store.getters.credentials;
       },
       sortTable: function sortTable(event) {
         const attributes = event.target.attributes;
@@ -115,24 +92,23 @@
         const sorted = attributes.sorted.value;
         const direction = (sorted === 'down') ? 1 : -1;
 
-        let sortFunction = 'dynamicSortAlphabetic';
-        if (sortType === 'number') { sortFunction = 'dynamicSortNumbers'; }
-        if (sortType === 'array') { sortFunction = 'dynamicSortArray'; }
-
+        /* eslint-disable no-param-reassign */
         if (direction === 1) {
           event.target.attributes.sorted.nodeValue = 'up';
         } else {
           event.target.attributes.sorted.nodeValue = 'down';
         }
+        /* eslint-enable no-param-reassign */
 
-        this.$store.commit(sortFunction, {
-          array: 'images',
-          reference: reference,
-          direction: direction,
+        this.dynamicSort({
+          type: sortType,
+          array: 'sites',
+          reference,
+          direction,
         });
       },
     },
-  }
+  };
 </script>
 
 <style>
