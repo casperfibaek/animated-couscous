@@ -1,11 +1,20 @@
-/* eslint-disable no-console, consistent-return */
-import connection from './connection';
-import initialize from './initialize';
+import setup from './setup';
+import defaultDatabase from './defaultDatabase';
 
 export default {
-  initialize,
-  base: connection.sequelize,
-  Users: connection.Users,
-  Sites: connection.Sites,
-  Images: connection.Images,
+  async initialize() {
+    try {
+      await setup.sequelize.authenticate();
+      await setup.sequelize.sync({ force: false });
+      await setup.Users.create(defaultDatabase.defaultUser);
+
+      return 'completed';
+    } catch (err) {
+      throw new Error(err);
+    }
+  },
+  base: setup.sequelize,
+  Users: setup.Users,
+  Sites: setup.Sites,
+  Images: setup.Images,
 };

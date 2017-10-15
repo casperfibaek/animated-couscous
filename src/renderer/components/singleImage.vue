@@ -47,13 +47,12 @@
         }).addTo(this.$data.map);
 
       const imageGeometry = JSON.parse(this.clickedImage.footprintJSON.replace(/'/g, '"'));
-      const imageLayer = Leaflet.geoJSON(imageGeometry
-        , {
-          style: {
-            fillOpacity: 0,
-            color: '#da5d47',
-          },
-        }).addTo(this.$data.map);
+      const imageLayer = Leaflet.geoJSON(imageGeometry, {
+        style: {
+          fillOpacity: 0,
+          color: '#da5d47',
+        },
+      }).addTo(this.$data.map);
 
       const bounds = imageLayer.getBounds();
       this.$data.map.fitBounds(bounds);

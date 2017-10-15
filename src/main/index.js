@@ -23,13 +23,12 @@ function createWindow() {
    */
   mainWindow = new BrowserWindow({
     width: 800, // 560
-    height: 770,
-    minHeight: 770,
-    minWidth: 560,
-    useContentSize: false,
+    height: 600,
+    minHeight: 800,
+    minWidth: 600,
     autoHideMenuBar: true,
     resizable: true,
-    frame: true,
+    frame: false,
   });
 
   mainWindow.loadURL(winURL);

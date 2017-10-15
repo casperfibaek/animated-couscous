@@ -28,6 +28,14 @@
     </ul>
   </div>
 </template>
+<style>
+  .userMenu{
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    z-index: 10;
+  }
+</style>
 
 <script>
   import electron from 'electron'; // eslint-disable-line

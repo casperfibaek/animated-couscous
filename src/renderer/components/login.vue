@@ -1,19 +1,19 @@
 <template>
-  <div class='empty base'>
+  <div id="login">
     <h4 class="text-bold">Sentinel Data Mananger</h4>
     <object type="image/svg+xml" data="static/logo_nirasspace.svg"
-width="105" height="105" border="0" class="nirasSpaceLogo"></object>
+width="105" height="105" border="0" class="login-logo-space"></object>
     <div class="divider margin-bottom"></div>
 
     <h6 class="margin-top">Login using your ESA Credentials</h6>
     <form class='loginForm' onsubmit="return false">
-      <div class=form-group>
+      <div class="form-group">
         <label class='form-label text-center' for='username'>Username</label>
         <input autofocus class='form-input username-input col-10 col-mx-auto' type="text" ref="username" placeholder="Enter Username" name="username" required>
         <span class="form-input-hint" v-if='formErrorUsernameStatus'>{{ formErrorMessage }}</span>
       </div>
 
-      <div class=form-group>
+      <div class="form-group">
         <label class='form-label text-center' for='password'>Password</label>
         <input ref="password" class='form-input password-input col-10 col-mx-auto' type="password" placeholder="Enter Password" name="password" required>
         <span class="form-input-hint" v-if='formErrorPasswordStatus'>{{ formErrorMessage }}</span>
@@ -26,10 +26,31 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
         <div class="loading" v-if="loading"></div>
       </div>
 
-      <img src='../assets/icons/logo.png' alt='NIRAS A/S' class='logo' width='160px'></img>
+      <img src='../assets/icons/logo.png' alt='NIRAS A/S' class='login-logo' width='160px'></img>
     </form>
   </div>
 </template>
+<style>
+  #login{
+    text-align: center;
+    margin-bottom: auto;
+    margin-top: 46px;
+    padding: 46px;
+    border: 1px solid #d2d2d2;
+    border-radius: 2px;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-logo{
+    margin-top: 40px;
+    bottom: 0;
+  }
+
+  .login-logo-space{
+    filter: drop-shadow(1px 1px 1px rgba(0,76,100,0.5));
+    margin: 10px;
+  }
+</style>
 
 <script>
   import esaLogin from '../assets/javascript/esa/esaLogin';
@@ -42,7 +63,7 @@ width="105" height="105" border="0" class="nirasSpaceLogo"></object>
         loading: false,
       };
     },
-    async mounted() {
+    async created() {
       try {
         if (!this.databaseStatus) {
           await DB.initialize();

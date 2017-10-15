@@ -1,6 +1,12 @@
 /* eslint-disable global-require, import/no-unresolved */
 import Vue from 'vue';
 import Router from 'vue-router';
+import login from '../components/login.vue';
+import allSites from '../components/allSites.vue';
+import createSentinel1 from '../components/createSentinel1.vue';
+import createSentinel2 from '../components/createSentinel2.vue';
+import singleSite from '../components/singleSite.vue';
+import singleImage from '../components/singleImage.vue';
 
 Vue.use(Router);
 
@@ -9,32 +15,32 @@ export default new Router({
     {
       path: '/',
       name: 'login',
-      component: require('@/components/login').default,
+      component: login,
     },
     {
       path: '/allSites',
       name: 'allSites',
-      component: require('@/components/allSites').default,
+      component: allSites,
     },
     {
       path: '/createSentinel1',
       name: 'createSentinel1',
-      component: require('@/components/createSentinel1').default,
+      component: createSentinel1,
     },
     {
       path: '/createSentinel2',
       name: 'createSentinel2',
-      component: require('@/components/createSentinel2').default,
+      component: createSentinel2,
     },
     {
       path: '/singleSite',
       name: 'singleSite',
-      component: require('@/components/singleSite').default,
+      component: singleSite,
     },
     {
       path: '/singleImage',
       name: 'singleImage',
-      component: require('@/components/singleImage').default,
+      component: singleImage,
     },
     {
       path: '*',
