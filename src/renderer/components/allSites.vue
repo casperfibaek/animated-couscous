@@ -1,5 +1,5 @@
 <template>
-  <div class='empty base'>
+  <div class='base'>
     <h5 class="text-bold">Current sites</h5>
     <table class="table table-striped table-hover siteTable">
       <thead>

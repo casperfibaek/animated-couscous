@@ -3,6 +3,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import login from '../components/login.vue';
 import allSites from '../components/allSites.vue';
+import overview from '../components/overview.vue';
 import createSentinel1 from '../components/createSentinel1.vue';
 import createSentinel2 from '../components/createSentinel2.vue';
 import singleSite from '../components/singleSite.vue';
@@ -16,6 +17,11 @@ export default new Router({
       path: '/',
       name: 'login',
       component: login,
+    },
+    {
+      path: '/overview',
+      name: 'overview',
+      component: overview,
     },
     {
       path: '/allSites',

@@ -21,7 +21,7 @@ width="105" height="105" border="0" class="login-logo-space"></object>
 
       <div class='form-group margin-top'>
         <button v-on:click="login()" type='submit' name='submit' class='btn btn-primary'>
-          <span>Login</span>
+          <span>Sign in</span>
         </button>
         <div class="loading" v-if="loading"></div>
       </div>
@@ -32,10 +32,11 @@ width="105" height="105" border="0" class="login-logo-space"></object>
 </template>
 <style>
   #login{
+    background: white;
     text-align: center;
-    margin-bottom: auto;
-    margin-top: 46px;
-    padding: 46px;
+    max-width: 400px;
+    padding: 36px;
+    margin: 0 auto;
     border: 1px solid #d2d2d2;
     border-radius: 2px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
@@ -48,7 +49,7 @@ width="105" height="105" border="0" class="login-logo-space"></object>
 
   .login-logo-space{
     filter: drop-shadow(1px 1px 1px rgba(0,76,100,0.5));
-    margin: 10px;
+    margin: 2px;
   }
 </style>
 
@@ -84,6 +85,7 @@ width="105" height="105" border="0" class="login-logo-space"></object>
       }
     },
     computed: {
+      credentials() { return this.$store.getters.getCredentials; },
       databaseStatus() { return this.$store.getters.getDatabaseStatus; },
       formErrorUsernameStatus() { return this.$store.getters.getFormErrorUsernameStatus; },
       formErrorPasswordStatus() { return this.$store.getters.getFormErrorPasswordStatus; },
@@ -92,6 +94,8 @@ width="105" height="105" border="0" class="login-logo-space"></object>
     methods: {
       setDatabaseStatus(bool) { return this.$store.commit('setDatabaseStatus', bool); },
       setLoginStatus(bool) { return this.$store.commit('setLoginStatus', bool); },
+      setSites(sites) { return this.$store.commit('setSites', sites); },
+      setClickedSite(site) { return this.$store.commit('setClickedSite', site); },
       setCredentials(credentials) {
         return this.$store.commit('setCredentials', credentials);
       },
@@ -134,8 +138,15 @@ width="105" height="105" border="0" class="login-logo-space"></object>
                 where: { userID: user.userID },
               });
               this.setCredentials(user.dataValues);
+
+              const sites = await DB.Sites.findAll({ where: { userID: this.credentials.userID } });
+              if (sites.length > 0) {
+                this.setSites(sites.map(site => site.dataValues));
+                this.setClickedSite(sites[0].dataValues);
+              }
+
               this.setLoginStatus(true);
-              this.$router.push({ path: 'allSites' });
+              this.$router.push({ path: 'overview' });
             } else {
               user = await esaLogin(username, password);
               if (user) {
@@ -143,7 +154,7 @@ width="105" height="105" border="0" class="login-logo-space"></object>
                 await DB.Users.create(user.dataValues);
                 this.setCredentials(user.dataValues);
                 this.setLoginStatus(true);
-                this.$router.push({ path: 'allSites' });
+                this.$router.push({ path: 'overview' });
               } else {
                 this.setErrorStatus(true);
                 this.setErrorMessage('Could not find user');

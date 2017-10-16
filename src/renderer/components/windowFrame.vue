@@ -1,6 +1,5 @@
 <template>
   <div id="frame-bar">
-       <div class="frame-text"><span>Sentinel Data Manager</span></div>
        <div class="frame-bar-btns">
           <div v-on:click="minimize" class="frame-bar-btn">
             <i class="fa fa-window-minimize" aria-hidden="true"></i>
@@ -12,44 +11,50 @@
             <i class="fa fa-times" aria-hidden="true"></i>
           </div>
        </div>
+       <div class="frame-text"><span>Sentinel Data Manager</span></div>
   </div>
 </template>
 <style>
   #frame-bar {
    -webkit-app-region: drag;
-   background-color: #BA1725;
+   background-color: #3f5162;
    z-index: 1000;
    height: 32px;
    padding-top: 4px;
    padding-bottom: 4px;
    width: 100%;
    margin: 0px;
-   display: flex;
-   justify-content: space-between;
   }
 
   .frame-text{
-    float: left;
-    margin-top: 2px;
-    margin-left: 20px;
+    text-align: center;
+    position: absolute;
+    margin: 0 auto;
+    width: 100%;
     color: #fff;
+  }
+
+  .frame-text > span{
+    font-size: 0.90em;
+    margin-top: 2px;
   }
 
   .frame-bar-btns {
     float: right;
     display: flex;
     justify-content: space-around;
-    z-index: 1001;
+    z-index: 1002;
    -webkit-app-region: no-drag;
   }
 
   .frame-bar-btn:hover{
-    background-color: #ab1a26;
+    background-color: #364452;
   }
 
   .frame-bar-btn{
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.125s;
+    z-index: 1002;
     height: 32px;
     width: 32px;
     color: white;
@@ -75,7 +80,10 @@
     name: 'windowFrame',
     methods: {
       close() { const w = remote.getCurrentWindow(); w.close(); },
-      maximize() { const w = remote.getCurrentWindow(); w.maximize(); },
+      maximize() {
+        const w = remote.getCurrentWindow();
+        if (w.isMaximized()) { w.unmaximize(); } else { w.maximize(); }
+      },
       minimize() { const w = remote.getCurrentWindow(); w.minimize(); },
     },
   };

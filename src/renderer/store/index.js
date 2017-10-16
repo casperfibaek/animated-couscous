@@ -18,7 +18,6 @@ export default new Vuex.Store({
     clickedSite: null,
     clickedImage: null,
 
-    modal_menu: false,
     modal_settings: false,
     modal_createGeometry: false,
 
@@ -41,7 +40,6 @@ export default new Vuex.Store({
     getClickedSite: state => state.clickedSite,
     getClickedImage: state => state.clickedImage,
 
-    getModal_menu: state => state.modal_menu,
     getModal_settings: state => state.modal_settings,
     getModal_createGeometry: state => state.modal_createGeometry,
 
@@ -64,7 +62,9 @@ export default new Vuex.Store({
   },
   mutations: {
     addSite: (state, site) => { state.sites.push(site); },
+    setSites: (state, sites) => { state.sites = sites; },
     addImage: (state, image) => { state.images.push(image); },
+    setImages: (state, images) => { state.images = images; },
     clearSites: (state) => { state.sites = []; },
     clearImages: (state) => { state.images = []; },
 

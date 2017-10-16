@@ -2,25 +2,48 @@
   <div id="app">
     <windowFrame></windowFrame>
     <div id="content">
-      <modals></modals>
-      <router-view></router-view>
+      <sidebar v-if="credentials.username || !loginStatus"></sidebar>
+      <!-- <sidebar v-if="credentials.username"></sidebar> -->
+      <div id="main-window">
+        <modals></modals>
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
 
+<style>
+  #content{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  #main-window{
+    width: 100%;
+    margin: 20px;
+  }
+</style>
+
 <script>
-  /* eslint-env browser */
   import './assets/javascript/leaflet';
   import './assets/javascript/leaflet.pm.min';
   import './assets/javascript/leaflet.imageOverlay.rotated';
   import windowFrame from './components/windowFrame.vue';
   import modals from './components/modals.vue';
+  import sidebar from './components/sidebar.vue';
 
   export default {
     name: 'migrate-vue',
     components: {
       windowFrame,
+      sidebar,
       modals,
+    },
+    computed: {
+      credentials() { return this.$store.getters.getCredentials; },
+      loginStatus() { return this.$store.getters.getLoginStatus; },
     },
   };
 </script>
