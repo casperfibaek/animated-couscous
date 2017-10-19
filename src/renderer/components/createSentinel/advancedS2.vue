@@ -9,16 +9,16 @@
       </div>
       <div class="col-1"></div>
       <div class="col-4">
-        <label class="form-checkbox float-left">
-          <input class="form-input" type="checkbox" reference="producttype" value="S2MSI1C">
+        <label class="form-checkbox float-left" for="form-S2MSI1C">
+          <input class="form-input" type="checkbox" reference="producttype" value="S2MSI1C" id="form-S2MSI1C">
             <i class="form-icon col-3"></i>
             <span class="col-9">S2MSI1C</span>
           </input>
         </label>
       </div>
       <div class="col-4">
-        <label class="form-checkbox float-left">
-          <input class="form-input" type="checkbox" reference="producttype" value="S2MSI2Ap" checked>
+        <label class="form-checkbox float-left" for="form-S2MSI2Ap">
+          <input class="form-input" type="checkbox" reference="producttype" value="S2MSI2Ap" checked id="form-S2MSI2Ap">
             <i class="form-icon col-3"></i>
             <span class="col-9">S2MSI2Ap</span>
           </input>

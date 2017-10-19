@@ -1,5 +1,5 @@
 function leftPad(int) {
-  if (!isNaN(int) && Number(int) < 10) {
+  if (!Number.isNaN(int) && Number(int) < 10) {
     return `0${int}`;
   }
   return String(int);

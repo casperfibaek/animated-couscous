@@ -1,24 +1,21 @@
 <template>
   <div id="login">
-    <h4 class="text-bold">Sentinel Data Mananger</h4>
-    <object type="image/svg+xml" data="static/logo_nirasspace.svg"
-width="105" height="105" border="0" class="login-logo-space"></object>
-    <div class="divider margin-bottom"></div>
-
     <h6 class="margin-top">Login using your ESA Credentials</h6>
     <form class='loginForm' onsubmit="return false">
       <div class="form-group">
-        <label class='form-label text-center' for='username'>Username</label>
-        <input autofocus class='form-input username-input col-10 col-mx-auto' type="text" ref="username" placeholder="Enter Username" name="username" required>
+        <label class='form-label text-center' for='form-username'>Username</label>
+        <input autofocus class='form-input username-input col-10 col-mx-auto' type="text" ref="username" placeholder="Enter Username"
+          id="form-username" required>
         <span class="form-input-hint" v-if='formErrorUsernameStatus'>{{ formErrorMessage }}</span>
       </div>
 
       <div class="form-group">
-        <label class='form-label text-center' for='password'>Password</label>
-        <input ref="password" class='form-input password-input col-10 col-mx-auto' type="password" placeholder="Enter Password" name="password" required>
+        <label class='form-label text-center' for='form-password'>Password</label>
+        <input ref="password" class='form-input password-input col-10 col-mx-auto' type="password" placeholder="Enter Password" id="form-password"
+          required>
         <span class="form-input-hint" v-if='formErrorPasswordStatus'>{{ formErrorMessage }}</span>
       </div>
-
+      
       <div class='form-group margin-top'>
         <button v-on:click="login()" type='submit' name='submit' class='btn btn-primary'>
           <span>Sign in</span>
@@ -43,7 +40,7 @@ width="105" height="105" border="0" class="login-logo-space"></object>
   }
 
   .login-logo{
-    margin-top: 40px;
+    margin-top: 20px;
     bottom: 0;
   }
 
@@ -68,10 +65,12 @@ width="105" height="105" border="0" class="login-logo-space"></object>
       try {
         if (!this.databaseStatus) {
           await DB.initialize();
-          this.setDatabaseStatus(true);
         }
+        this.setDatabaseStatus(true);
         const user = await DB.Users.findOne({
-          order: [['createdAt', 'DESC']],
+          order: [
+            ['createdAt', 'DESC']
+          ],
         });
         const username = this.$refs.username.value;
         if (username.length === 0) {
@@ -85,17 +84,35 @@ width="105" height="105" border="0" class="login-logo-space"></object>
       }
     },
     computed: {
-      credentials() { return this.$store.getters.getCredentials; },
-      databaseStatus() { return this.$store.getters.getDatabaseStatus; },
-      formErrorUsernameStatus() { return this.$store.getters.getFormErrorUsernameStatus; },
-      formErrorPasswordStatus() { return this.$store.getters.getFormErrorPasswordStatus; },
-      formErrorMessage() { return this.$store.getters.getFormErrorMessage; },
+      credentials() {
+        return this.$store.getters.getCredentials;
+      },
+      databaseStatus() {
+        return this.$store.getters.getDatabaseStatus;
+      },
+      formErrorUsernameStatus() {
+        return this.$store.getters.getFormErrorUsernameStatus;
+      },
+      formErrorPasswordStatus() {
+        return this.$store.getters.getFormErrorPasswordStatus;
+      },
+      formErrorMessage() {
+        return this.$store.getters.getFormErrorMessage;
+      },
     },
     methods: {
-      setDatabaseStatus(bool) { return this.$store.commit('setDatabaseStatus', bool); },
-      setLoginStatus(bool) { return this.$store.commit('setLoginStatus', bool); },
-      setSites(sites) { return this.$store.commit('setSites', sites); },
-      setClickedSite(site) { return this.$store.commit('setClickedSite', site); },
+      setDatabaseStatus(bool) {
+        return this.$store.commit('setDatabaseStatus', bool);
+      },
+      setLoginStatus(bool) {
+        return this.$store.commit('setLoginStatus', bool);
+      },
+      setSites(sites) {
+        return this.$store.commit('setSites', sites);
+      },
+      setClickedSite(site) {
+        return this.$store.commit('setClickedSite', site);
+      },
       setCredentials(credentials) {
         return this.$store.commit('setCredentials', credentials);
       },
@@ -108,8 +125,12 @@ width="105" height="105" border="0" class="login-logo-space"></object>
       setFormErrorSetMessage(string) {
         return this.$store.commit('setFormErrorSetMessage', string);
       },
-      setErrorStatus(bool) { return this.$store.commit('setErrorStatus', bool); },
-      setErrorMessage(string) { return this.$store.commit('setErrorMessage', string); },
+      setErrorStatus(bool) {
+        return this.$store.commit('setErrorStatus', bool);
+      },
+      setErrorMessage(string) {
+        return this.$store.commit('setErrorMessage', string);
+      },
 
       async login() {
         const username = this.$refs.username.value;
@@ -128,25 +149,36 @@ width="105" height="105" border="0" class="login-logo-space"></object>
 
           try {
             let user = await DB.Users.findOne({
-              where: { username, password },
+              where: {
+                username,
+                password
+              },
             });
 
             if (user) {
               await DB.Users.update({
                 lastLogin: new Date(),
               }, {
-                where: { userID: user.userID },
+                where: {
+                  userID: user.userID
+                },
               });
               this.setCredentials(user.dataValues);
 
-              const sites = await DB.Sites.findAll({ where: { userID: this.credentials.userID } });
+              const sites = await DB.Sites.findAll({
+                where: {
+                  userID: this.credentials.userID
+                }
+              });
               if (sites.length > 0) {
                 this.setSites(sites.map(site => site.dataValues));
                 this.setClickedSite(sites[0].dataValues);
               }
 
               this.setLoginStatus(true);
-              this.$router.push({ path: 'overview' });
+              this.$router.push({
+                path: 'overview'
+              });
             } else {
               user = await esaLogin(username, password);
               if (user) {
@@ -154,7 +186,9 @@ width="105" height="105" border="0" class="login-logo-space"></object>
                 await DB.Users.create(user.dataValues);
                 this.setCredentials(user.dataValues);
                 this.setLoginStatus(true);
-                this.$router.push({ path: 'overview' });
+                this.$router.push({
+                  path: 'overview'
+                });
               } else {
                 this.setErrorStatus(true);
                 this.setErrorMessage('Could not find user');
