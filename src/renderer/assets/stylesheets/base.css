@@ -1,6 +1,9 @@
-html{ height: 100%; width: 100%; }
+html {
+  height: 100%;
+  width: 100%;
+}
 
-body{
+body {
   background: #f2f1ec;
   overflow: hidden;
   height: 100%;
@@ -9,21 +12,93 @@ body{
   padding: 0;
 }
 
-#app{
-	color: #363d42;
-	height: 100%;
-	width: 100%;
-	font-family: sans-serif;
+#app {
+  color: #363d42;
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
 }
 
-a{ cursor: pointer; }
-textarea { resize: none; }
-.padding-left{ padding-left: 10px; }
-.padding-right{ padding-right: 10px; }
-.padding-both{ padding-left: 10px; padding-right: 10px; }
-.margin-top{ margin-top: 10px; }
-.margin-bottom{ margin-bottom: 10px; }
-.no-wrap{ white-space: nowrap; }
-.text-center{ text-align: center !important; }
-.cursor-pointer{ cursor: pointer; }
-.events-none{ pointer-events: none; user-select: none; }
+.base {
+  background: #fff;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  border: 1px solid #d2d2d2;
+}
+
+.form-group > label{
+  width: 120px;
+  min-width: 100px;
+  font-weight: 700;
+}
+
+.form-group > .content{
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding-left: 10px;
+}
+
+.is-success{
+  background: rgba(217, 245, 217, 0.9);
+}
+
+.font-bold{
+  font-weight: 600;
+}
+
+.popover > label{
+  width: 100px;
+}
+
+a {
+  cursor: pointer;
+}
+
+textarea {
+  resize: none;
+}
+
+.padding-left {
+  padding-left: 10px;
+}
+
+.padding-right {
+  padding-right: 10px;
+}
+
+.padding-both {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.margin-top {
+  margin-top: 10px;
+}
+
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.content-center {
+  display: flex;
+  justify-content: center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.events-none {
+  pointer-events: none;
+  user-select: none;
+}

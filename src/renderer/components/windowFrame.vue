@@ -2,13 +2,13 @@
   <div id="frame-bar">
        <div class="frame-bar-btns">
           <div v-on:click="minimize" class="frame-bar-btn">
-            <i class="fa fa-window-minimize" aria-hidden="true"></i>
+            <i class="icon-minus" aria-hidden="true"></i>
           </div>
           <div v-on:click="maximize" class="frame-bar-btn">
-            <i class="fa fa-window-maximize" aria-hidden="true"></i>
+            <i class="icon-popup" aria-hidden="true"></i>
           </div>
           <div v-on:click="close" class="frame-bar-btn">
-            <i class="fa fa-times" aria-hidden="true"></i>
+            <i class="icon-cancel" aria-hidden="true"></i>
           </div>
        </div>
        <div class="frame-text"><span>Sentinel Data Manager</span></div>
@@ -16,14 +16,15 @@
 </template>
 <style>
   #frame-bar {
-   -webkit-app-region: drag;
-   background-color: #3f5162;
-   z-index: 1000;
-   height: 32px;
-   padding-top: 4px;
-   padding-bottom: 4px;
-   width: 100%;
-   margin: 0px;
+    position: absolute;
+    -webkit-app-region: drag;
+    background-color: #3f5162;
+    z-index: 1000;
+    height: 32px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 100%;
+    margin: 0px;
   }
 
   .frame-text{
@@ -66,9 +67,10 @@
     align-items: center;
   }
 
-  .frame-bar-btn > i{
-
+  .frame-bar-btn > .icon-minus{
+    margin-top: 8px;
   }
+
 </style>
 
 <script>

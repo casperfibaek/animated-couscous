@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <windowFrame></windowFrame>
+    <div class="placeholder"></div>
     <div id="content">
       <sidebar v-if="credentials.username || !loginStatus"></sidebar>
       <!-- <sidebar v-if="credentials.username"></sidebar> -->
@@ -13,16 +14,24 @@
 </template>
 
 <style>
-  #content{
+  #content {
     height: 100%;
     width: 100%;
     display: flex;
     justify-content: space-between;
   }
 
-  #main-window{
+  #main-window {
     width: 100%;
     margin: 20px;
+  }
+
+  .placeholder {
+    height: 32px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 100%;
+    margin: 0px;
   }
 </style>
 
@@ -52,6 +61,6 @@
   @import url('./assets/stylesheets/leaflet.css');
   @import url('./assets/stylesheets/leaflet.pm.css');
   @import url('./assets/stylesheets/spectre.min.css');
-  @import url('./assets/stylesheets/font-awesome.min.css');
+  @import url('./assets/stylesheets/fontello.css');
   @import url('./assets/stylesheets/base.css');
 </style>

@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for='site in sites' class='siteTable-row' v-bind:siteID="site.siteID" v-on:click="clickedRow">
+        <tr v-for='(site, index) in sites' class='siteTable-row' v-bind:key="index" v-bind:siteID="site.siteID" v-on:click="clickedRow">
           <td><span>{{ site.sitename }}</span></td>
           <td><span>{{ site.satellite }}</span></td>
           <td><span>{{ site.frequency }}</span></td>
@@ -39,16 +39,6 @@
         </tr>
       </tbody>
     </table>
-    <router-link :to="{ path: '/createSentinel1' }">
-      <button type='button' name='submit' class='btn btn-primary margin-top'>
-        <span>New Sentinel One</span>
-      </button>
-    </router-link>
-    <router-link :to="{ path: '/createSentinel2' }">
-      <button type='button' name='submit' class='btn btn-primary margin-top'>
-        <span>New Sentinel Two</span>
-      </button>
-    </router-link>
   </div>
 </template>
 
@@ -92,13 +82,11 @@
         const sorted = attributes.sorted.value;
         const direction = (sorted === 'down') ? 1 : -1;
 
-        /* eslint-disable no-param-reassign */
         if (direction === 1) {
-          event.target.attributes.sorted.nodeValue = 'up';
+          event.target.attributes.sorted.nodeValue = 'up'; // eslint-disable-line
         } else {
-          event.target.attributes.sorted.nodeValue = 'down';
+          event.target.attributes.sorted.nodeValue = 'down'; // eslint-disable-line
         }
-        /* eslint-enable no-param-reassign */
 
         this.dynamicSort({
           type: sortType,

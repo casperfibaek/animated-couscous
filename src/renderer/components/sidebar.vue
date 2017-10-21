@@ -5,7 +5,7 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title h5">
-              <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+              <i class="icon-user-circle-o" aria-hidden="true"></i>
               <span>{{ credentials.firstname }} {{ credentials.lastname }}</span>
             </div>
             <div class="card-subtitle text-gray">{{ credentials.domain }}</div>
@@ -15,11 +15,11 @@
           </div>
           <div class="card-footer">
             <button v-on:click="logout()" class="btn btn-secondary float-left">
-              <i class="fa fa-sign-out" aria-hidden="true"></i>
+              <i class="icon-login" aria-hidden="true"></i>
               <span>Sign out</span>
             </button>
             <button v-on:click="setModal({ modal: 'settings', status: true });" class="btn btn-primary float-right">
-              <i class="fa fa-cog" aria-hidden="true"></i>
+              <i class="icon-cog" aria-hidden="true"></i>
               <span>Settings</span>
             </button>
           </div>
@@ -31,16 +31,26 @@
           <span>You currently do not have any sites.</span>
           </br>
           </br>
-          <button v-on:click="createNew();" class="btn btn-secondary">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-            <span>Create new</span>
-          </button>
+          <router-link :to="{ path: '/createSentinel' }">
+            <button class="btn btn-secondary">
+              <i class="icon-plus" aria-hidden="true"></i>
+              <span class="padding-right">Create new</span>
+            </button>
+          </router-link>
         </div>
         <div v-else class="sidebar-sites">
           <h5 class="text-center margin-top">Current sites</h5>
           <ul class="sidebar-sitelist">
-            <li class='sidebar-site' v-for='(site, index) in sites' v-on:click="clickSite" v-bind:siteID="site.siteID" v-bind:class="{ selected: index === 0}">
+            <li class='sidebar-site sidebar-element' v-for='(site, index) in sites' v-on:click="clickSite" v-bind:siteid="site.siteID" v-bind:class="{ selected: index === 0}" v-bind:key="index">
               <span>{{ site.sitename }}</span>
+            </li>
+            <li class="sidebar-element bottom">
+              <router-link :to="{ path: '/createSentinel' }">
+                <button class="btn btn-secondary">
+                  <i class="icon-plus" aria-hidden="true"></i>
+                  <span class="padding-right">Create New</span>
+                </button>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -81,20 +91,28 @@
     list-style: none;
   }
 
-  .sidebar-site{
+  .sidebar-element{
     transition: box-shadow 0.2s;
     height: 36px;
     margin-right: 20px;
     padding-top: 6px;
+  }
+
+  .sidebar-element.bottom{
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sidebar-site{
     background: #f2f1ec;
-    border: 1px solid #d2d2d2;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    border: 1px solid #d2d2d2;
   }
 
   .sidebar-site.selected{
     background: #92c3d8 !important;
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
     font-weight: 600;
   }
 
@@ -161,15 +179,13 @@ export default {
     clearCredentials() { this.$store.commit('clearCredentials'); },
     route(page) { this.$router.push({ path: page }); },
 
-    createNew() { console.log(this.sites); },
-
     clickSite(event) {
       const listSites = document.getElementsByClassName('sidebar-site');
       for (let i = 0; i < listSites.length; i += 1) {
         listSites[i].classList.remove('selected');
       }
       event.target.classList.add('selected');
-      const siteID = getClickedID(event, 'siteID');
+      const siteID = getClickedID(event, 'siteid');
       const clicked = findInArray(this.sites, { siteID });
       this.setClickedSite(clicked);
     },

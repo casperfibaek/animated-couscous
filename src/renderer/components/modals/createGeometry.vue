@@ -1,32 +1,48 @@
 <template>
   <div class="modal active">
     <div class="modal-overlay"></div>
-    <div class="modal-container settingsContainer">
+    <div class="modal-container">
       <div class="modal-header">
-        <div class="modal-title text-center h6 text-bold">Create rough geometry</div>
-        <div class="divider"></div>
+        <div class="modal-title text-center h5">Create Geometry</div>
       </div>
       <div class="modal-body">
-        <div class="content">
-          <button type="button" class="btn btn-primary newGeometry" v-on:click="startNewGeometry">
-            <span>Start new</span>
-          </button>
-          <div id="map"></div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <div class="divider">
-          <button v-on:click="setModal({modal: 'createGeometry', status: false});" class="btn btn-primary float-left margin-top" name="close">
-            <span>Close</span>
+        <div class="geometry-content">
+          <div id="map">
+            <button type="button" class="btn btn-primary newGeometry" v-on:click="startNewGeometry">
+              <span>Start new</span>
+            </button>
+          </div>
+          <button v-on:click="setModal({modal: 'createGeometry', status: false});" class="btn btn-secondary float-left margin-top" name="close">
+            <span class="padding-both">Back</span>
           </button>
           <button type="button" name="apply" class="btn btn-primary tooltip tooltip-bottom float-right margin-top" data-tooltip="Apply your changes." v-on:click="applyGeometry">
-            <span>Apply</span>
+            <span class="padding-both">Apply</span>
           </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style>
+  #map{
+    height: 360px;
+    width: 100%;
+  }
+
+  .newGeometry{
+    position: relative;
+    z-index: 1000;
+    float: right;
+    right: 10px;
+    top: 10px;
+  }
+
+  .geometry-content{
+    overflow: hidden;
+  }
+</style>
+
 
 <script>
   /* eslint-disable no-console */
